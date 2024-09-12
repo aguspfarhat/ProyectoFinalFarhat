@@ -1,5 +1,5 @@
-import Link from "next/link"
-import Image from "next/image";
+// import Link from "next/link"
+// import Image from "next/image";
 // import styles from "./globals.css"
 import HomeTitle from "./componentes/home";
 import React from "react";
