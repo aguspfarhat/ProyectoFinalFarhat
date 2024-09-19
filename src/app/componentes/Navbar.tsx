@@ -20,7 +20,7 @@ const Navbar = () => {
 
     return (
         <nav
-            className={`flex justify-between items-center p-5 transition-all duration-300 ease-in-out ${isScrolled ? 'bg-white bg-opacity-5 backdrop-blur-md shadow-md' : 'bg-transparent'
+            className={`flex justify-between items-center p-5 transition-all duration-300 ease-in-out ${isScrolled ? 'bg-white bg-opacity-5 backdrop-blur-md' : 'bg-transparent'
                 } sticky top-0 z-50`}
         >
             {/* Logo alineado a la izquierda */}
@@ -68,7 +68,7 @@ const Navbar = () => {
 
             {/* Botones alineados a la derecha */}
             <div className="flex space-x-4">
-                <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md font-semibold hover:text-[#35B88E]">
+                <button className="text-gray-800 px-4 py-2 rounded-md font-semibold hover:text-[#35B88E]">
                     Iniciar sesión
                 </button>
                 <button className="bg-[#35B88E] text-white px-4 py-2 rounded-md font-semibold hover:bg-green-600">
