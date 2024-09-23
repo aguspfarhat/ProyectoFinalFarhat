@@ -13,7 +13,7 @@ const Footer = () => {
                     className="hidden md:block"
                 />
             </div>
-            <div className="flex justify-center ml-12 mt-7">
+            <div className="flex justify-center ml-10 mt-7">
                 <ul className="flex space-x-8">
                     <li>
                         <Link href="/" className="text-[#757575] font-semibold hover:text-[#35B88E] text-xs">
@@ -32,7 +32,7 @@ const Footer = () => {
                     </li>
                 </ul>
             </div>
-            <div className="mt-10">
+            <div className="mt-10 ml-2">
                 <div className="flex justify-center">
                     <p className="text-[#757575] font-semibold text-xs">Terminos y condiciones</p>
                 </div>

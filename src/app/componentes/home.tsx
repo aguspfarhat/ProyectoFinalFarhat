@@ -4,6 +4,7 @@ import React from 'react';
 import styles from '@/app/UI/home.module.css';
 import Image from 'next/image';
 import useIntersectionObserver from '../hooks/useIntersectionObserver';
+import Link from 'next/link';
 
 const Home: React.FC = () => {
     const { ref: refQueBuscamos, isIntersecting: isIntersectingQueBuscamos } = useIntersectionObserver(0.1);
@@ -60,7 +61,7 @@ const Home: React.FC = () => {
                                 ref={refComoFunciona}
                                 className={`transition-opacity duration-1000 ${isIntersectingComoFunciona ? 'opacity-100' : 'opacity-0'}`}
                             >
-                                <h2 className="text-5xl font-bold text-[#757575] text-center">Cómo funciona?</h2>
+                                <h2 className="text-5xl font-bold text-[#757575] text-right">Cómo funciona?</h2>
                                 <p className="mt-16 text-gray-500 text-right text-lg">
                                     Es una aplicación web que consiste en que los usuarios puedan publicar la disponibilidad de algún producto ortopédico o bien la búsqueda del mismo.
                                 </p>
@@ -92,11 +93,12 @@ const Home: React.FC = () => {
                         <h1 className="text-5xl text-right font-bold text-[#757575] mr-4 "> y/o empezar a publicar </h1>
                         <h1 className="text-5xl text-right font-bold text-[#757575] mr-4 ">algun producto, haz click </h1>
                         <h1 className="text-5xl text-right font-bold text-[#757575] mr-4 ">aquí!</h1>
-                        <div className="flex">
-                            <button className="bg-[#35B88E] text-white px-4 py-2 rounded-md font-semibold hover:bg-green-600 ml-auto mt-9">
-                                Publicaciones
-                            </button>
-
+                        <div className="flex justify-end mr-4">
+                            <Link href="./Publicaciones" passHref>
+                                <button className="bg-[#35B88E] text-white px-4 py-2 rounded-md font-semibold hover:bg-green-600 ml-auto mt-9">
+                                    Publicaciones
+                                </button>
+                            </Link>
                         </div>
                     </div>
                 </div>
