@@ -56,9 +56,9 @@ const Navbar = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link href="/comunidad" className={`text-[#757575] font-semibold hover:text-[#35B88E] relative ${pathname === '/comunidad' ? 'text-[#35B88E]' : ''}`}>
+                        <Link href="/Comunidad" className={`text-[#757575] font-semibold hover:text-[#35B88E] relative ${pathname === '/Comunidad' ? 'text-[#35B88E]' : ''}`}>
                             Comunidad
-                            {pathname === '/comunidad' && (
+                            {pathname === '/Comunidad' && (
                                 <span className="absolute bottom-[-6px] left-0 w-full h-[2px] bg-[#35B88E]"></span>
                             )}
                         </Link>
