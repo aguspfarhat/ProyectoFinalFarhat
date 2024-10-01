@@ -21,12 +21,12 @@ const Footer = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link href="/" className="text-[#757575] font-semibold hover:text-[#35B88E] text-xs">
+                        <Link href="/Publicaciones" className="text-[#757575] font-semibold hover:text-[#35B88E] text-xs">
                             Publicaciones
                         </Link>
                     </li>
                     <li>
-                        <Link href="/" className="text-[#757575] font-semibold hover:text-[#35B88E] text-xs">
+                        <Link href="/Comunidad" className="text-[#757575] font-semibold hover:text-[#35B88E] text-xs">
                             Comunidad
                         </Link>
                     </li>

@@ -68,12 +68,17 @@ const Navbar = () => {
 
             {/* Botones alineados a la derecha */}
             <div className="flex space-x-4">
-                <button className="text-gray-800 px-4 py-2 rounded-md font-semibold hover:text-[#35B88E]">
-                    Iniciar sesión
-                </button>
-                <button className="bg-[#35B88E] text-white px-4 py-2 rounded-md font-semibold hover:bg-green-600">
-                    Registrarse
-                </button>
+                <Link href="/Login">
+                    <button className="text-gray-800 px-4 py-2 rounded-md font-semibold hover:text-[#35B88E]">
+                        Iniciar sesión
+                    </button>
+                </Link>
+
+                <Link href="Signup">
+                    <button className="bg-[#35B88E] text-white px-4 py-2 rounded-md font-semibold hover:bg-green-600">
+                        Registrarse
+                    </button>
+                </Link>
             </div>
         </nav>
     );
