@@ -22,3 +22,10 @@
     padding-top: 7%;
     margin-left: 0rem;
 }
+
+@media (max-width:768px){
+    .textosResponsive{
+        flex-direction: column;
+        gap: 0;
+    }
+}

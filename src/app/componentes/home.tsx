@@ -28,12 +28,11 @@ const Home: React.FC = () => {
                     alt="Imagen de Prestar"
                 />
             </div>
-
             <div className={styles.TextosPresentacion}>
                 <div className="py-10">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="flex justify-center text-center space-x-36">
-
+                        <div className="textosResponsive">
                             {/* Animación para "Que es lo que buscamos?" */}
                             <div
                                 ref={refQueBuscamos}
@@ -44,7 +43,8 @@ const Home: React.FC = () => {
                                     Tratamos de ayudar a aquellas personas que no tienen las posibilidades tanto económicas como sociales para adquirir de forma rápida y sencilla productos ortopédicos de forma alquilada.
                                 </p>
                             </div>
-
+                         
+                            
                             {/* Animación para "Por qué lo hacemos?" */}
                             <div
                                 ref={refPorQueLoHacemos}
@@ -55,7 +55,8 @@ const Home: React.FC = () => {
                                     Lo hacemos porque, en base a nuestras experiencias personales con la búsqueda de productos ortopédicos, siempre encontramos algún problema y queremos que eso ya no exista.
                                 </p>
                             </div>
-
+                       
+                         
                             {/* Animación para "Cómo funciona?" */}
                             <div
                                 ref={refComoFunciona}
@@ -66,12 +67,12 @@ const Home: React.FC = () => {
                                     Es una aplicación web que consiste en que los usuarios puedan publicar la disponibilidad de algún producto ortopédico o bien la búsqueda del mismo.
                                 </p>
                             </div>
-
+                       
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
 
             <div ref={refEmpezaAyudar}
                 className={`transition-opacity duration-1000 ${isIntersectingEmpezaAyudar ? 'opacity-100' : 'opacity-0'}`}>
