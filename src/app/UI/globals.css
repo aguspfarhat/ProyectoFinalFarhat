@@ -25,3 +25,38 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Hover underline custom class */
+.hover-underline::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: #35B88E;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.hover-underline-white::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: white;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.hover-underline:hover::after,
+.hover-underline-white:hover::after {
+  transform: scaleX(1);
+}
+
+
+.hover-underline:not(:hover)::after,
+.hover-underline-white:not(:hover)::after {
+  transform-origin: right;
+  transform: scaleX(0)
+}

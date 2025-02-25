@@ -37,7 +37,7 @@ const Footer = () => {
                     <p className="text-[#757575] font-semibold text-xs">Terminos y condiciones</p>
                 </div>
                 <div className="flex justify-center">
-                    <p className="text-[#757575] font-semibold text-xs">@ 2024 Prestar</p>
+                    <p className="text-[#757575] font-semibold text-xs">@ 2025 Cuidar</p>
                 </div>
             </div>
             <br />

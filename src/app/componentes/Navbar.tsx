@@ -3,10 +3,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { useSession, signOut } from 'next-auth/react';
 
 const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
-    const pathname = usePathname(); // Obtiene la ruta actual
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const [fotoPerfil, setFotoPerfil] = useState("/default-profile.png"); // Estado para la foto de perfil
+    const pathname = usePathname();
+    const { data: session } = useSession();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -14,9 +18,28 @@ const Navbar = () => {
         };
 
         window.addEventListener('scroll', handleScroll);
-
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    // Obtener la foto de perfil del usuario
+    useEffect(() => {
+        const obtenerFotoPerfil = async () => {
+            if (!session?.user?.email) return;
+
+            try {
+                const res = await fetch(`/api/ubicacion?email=${session.user.email}`);
+                const data = await res.json();
+
+                if (data.fotoPerfil) {
+                    setFotoPerfil(data.fotoPerfil);
+                }
+            } catch (error) {
+                console.error("Error obteniendo la foto de perfil:", error);
+            }
+        };
+
+        obtenerFotoPerfil();
+    }, [session]);
 
     return (
         <nav
@@ -31,58 +54,92 @@ const Navbar = () => {
                         width={45}
                         height={45}
                         alt="Logo"
-                        className="hidden md:block"
+                        className="block"
                     />
                 </Link>
             </div>
 
-            {/* Enlaces centrados */}
-            <div className="absolute left-1/2 transform -translate-x-1/2">
-                <ul className="flex space-x-16">
+            {/* Enlaces centrados para pantallas grandes */}
+            <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2">
+                <ul className="flex space-x-8">
                     <li>
-                        <Link href="/" className={`text-[#757575] font-semibold hover:text-[#35B88E] relative ${pathname === '/' ? 'text-[#35B88E]' : ''}`}>
+                        <Link
+                            href="/"
+                            className={`hover-underline text-[#757575] font-semibold hover:text-[#35B88E] relative ${pathname === '/' ? 'text-[#35B88E]' : ''
+                                }`}
+                        >
                             Inicio
-                            {pathname === '/' && (
-                                <span className="absolute bottom-[-6px] left-0 w-full h-[2px] bg-[#35B88E]"></span>
-                            )}
                         </Link>
                     </li>
                     <li>
-                        <Link href="/Publicaciones" className={`text-[#757575] font-semibold hover:text-[#35B88E] relative ${pathname === '/Publicaciones' ? 'text-[#35B88E]' : ''}`}>
+                        <Link
+                            href="/Publicaciones"
+                            className={`hover-underline text-[#757575] font-semibold hover:text-[#35B88E] relative ${pathname === '/Publicaciones' ? 'text-[#35B88E]' : ''
+                                }`}
+                        >
                             Publicaciones
-                            {pathname === '/Publicaciones' && (
-                                <span className="absolute bottom-[-6px] left-0 w-full h-[2px] bg-[#35B88E]"></span>
-                            )}
                         </Link>
                     </li>
                     <li>
-                        <Link href="/Comunidad" className={`text-[#757575] font-semibold hover:text-[#35B88E] relative ${pathname === '/Comunidad' ? 'text-[#35B88E]' : ''}`}>
+                        <Link
+                            href="/Comunidad"
+                            className={`hover-underline text-[#757575] font-semibold hover:text-[#35B88E] relative ${pathname === '/Comunidad' ? 'text-[#35B88E]' : ''
+                                }`}
+                        >
                             Comunidad
-                            {pathname === '/Comunidad' && (
-                                <span className="absolute bottom-[-6px] left-0 w-full h-[2px] bg-[#35B88E]"></span>
-                            )}
                         </Link>
                     </li>
                 </ul>
             </div>
 
-            {/* Botones alineados a la derecha */}
-            <div className="flex space-x-4">
-                <Link href="/Login">
-                    <button className="text-gray-800 px-4 py-2 rounded-md font-semibold hover:text-[#35B88E]">
-                        Iniciar sesión
-                    </button>
-                </Link>
+            {/* Botones o icono de perfil dependiendo del estado de la sesión */}
+            <div className="hidden md:flex space-x-4 relative">
+                {session ? (
+                    // Mostrar el icono de perfil si hay sesión activa
+                    <div>
+                        <Image
+                            src={fotoPerfil || "/default-profile.png"} // Mostrar la foto de perfil obtenida
+                            width={35}
+                            height={35}
+                            alt="Perfil"
+                            className="rounded-full cursor-pointer"
+                            onClick={() => setIsProfileOpen(!isProfileOpen)} // Abrir/cerrar pop-up
+                        />
+                        {isProfileOpen && (
+                            <div className="absolute right-0 mt-2 w-48 bg-white shadow-md rounded-md z-50">
+                                <button className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100">
+                                    <Link href="/Perfil">
+                                        Mi perfil
+                                    </Link>
+                                </button>
+                                <button
+                                    className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                                    onClick={() => signOut()}
+                                >
+                                    Cerrar sesión
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    // Mostrar botones de iniciar sesión y registrarse si no hay sesión
+                    <>
+                        <Link href="/Login">
+                            <button className="text-gray-800 px-4 py-2 rounded-md font-semibold hover:text-[#35B88E]">
+                                Iniciar sesión
+                            </button>
+                        </Link>
 
-                <Link href="Signup">
-                    <button className="bg-[#35B88E] text-white px-4 py-2 rounded-md font-semibold hover:bg-green-600">
-                        Registrarse
-                    </button>
-                </Link>
+                        <Link href="/Signup">
+                            <button className="bg-[#35B88E] text-white px-4 py-2 rounded-md font-semibold hover:bg-green-600">
+                                Registrarse
+                            </button>
+                        </Link>
+                    </>
+                )}
             </div>
         </nav>
     );
 };
 
 export default Navbar;
-

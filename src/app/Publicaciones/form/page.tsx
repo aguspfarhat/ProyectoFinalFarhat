@@ -1,289 +1,40 @@
-// 'use client';
-
-// import { useState, useEffect } from 'react';
-
-// interface Publicacion {
-//     id: number;
-//     titulo: string;
-//     descripcion: string;
-//     imagen: string;
-// }
-
-// const Publicaciones = () => {
-//     const [mostrarFormulario, setMostrarFormulario] = useState(false);
-//     const [titulo, setTitulo] = useState('');
-//     const [descripcion, setDescripcion] = useState('');
-//     const [imagen, setImagen] = useState<File | null>(null);
-//     const [publicaciones, setPublicaciones] = useState<Publicacion[]>([]);
-//     const [publicacionSeleccionada, setPublicacionSeleccionada] = useState<Publicacion | null>(null); // Estado para la publicación seleccionada
-//     const [mostrarPopUp, setMostrarPopUp] = useState(false); // Estado para controlar la visibilidad del pop-up
-
-//     const [currentPage, setCurrentPage] = useState(1);
-//     const publicacionesPorPagina = 6;
-
-//     useEffect(() => {
-//         const publicacionesGuardadas = localStorage.getItem('publicaciones');
-//         if (publicacionesGuardadas) {
-//             try {
-//                 setPublicaciones(JSON.parse(publicacionesGuardadas));
-//             } catch (error) {
-//                 console.error("Error al parsear publicaciones guardadas: ", error);
-//             }
-//         }
-//     }, []);
-
-//     useEffect(() => {
-//         if (publicaciones.length > 0) {
-//             localStorage.setItem('publicaciones', JSON.stringify(publicaciones));
-//         }
-//     }, [publicaciones]);
-
-//     const handleSubmit = (e: React.FormEvent) => {
-//         e.preventDefault();
-
-//         if (!titulo || !descripcion || !imagen) {
-//             alert('Por favor completa todos los campos.');
-//             return;
-//         }
-
-//         const reader = new FileReader();
-//         reader.onloadend = () => {
-//             const nuevaPublicacion: Publicacion = {
-//                 id: Date.now(),
-//                 titulo,
-//                 descripcion,
-//                 imagen: reader.result as string,
-//             };
-
-//             setPublicaciones([nuevaPublicacion, ...publicaciones]);
-
-//             setTitulo('');
-//             setDescripcion('');
-//             setImagen(null);
-//             setMostrarFormulario(false);
-//         };
-
-//         if (imagen) {
-//             reader.readAsDataURL(imagen);
-//         }
-//     };
-
-//     const abrirPopUp = (publicacion: Publicacion) => {
-//         setPublicacionSeleccionada(publicacion);
-//         setMostrarPopUp(true);
-//     };
-
-//     const cerrarPopUp = () => {
-//         setPublicacionSeleccionada(null);
-//         setMostrarPopUp(false);
-//     };
-
-//     const totalPaginas = Math.ceil(publicaciones.length / publicacionesPorPagina);
-//     const indiceUltimaPublicacion = currentPage * publicacionesPorPagina;
-//     const indicePrimeraPublicacion = indiceUltimaPublicacion - publicacionesPorPagina;
-//     const publicacionesActuales = publicaciones.slice(indicePrimeraPublicacion, indiceUltimaPublicacion);
-
-//     const siguientePagina = () => {
-//         if (currentPage < totalPaginas) {
-//             setCurrentPage(prev => prev + 1);
-//         }
-//     };
-
-//     const paginaAnterior = () => {
-//         if (currentPage > 1) {
-//             setCurrentPage(prev => prev - 1);
-//         }
-//     };
-
-//     return (
-//         <div className="container mx-auto px-4 py-8">
-//             {/* Fondo blur al abrir el formulario */}
-//             {mostrarFormulario && (
-//                 <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-10"></div>
-//             )}
-
-//             {/* Sección superior */}
-//             <div className="flex justify-between items-center mb-6">
-//                 <button className="bg-[#35B88E] text-white px-4 py-2 rounded-md font-semibold hover:bg-green-600">
-//                     <svg
-//                         xmlns="http://www.w3.org/2000/svg"
-//                         fill="none"
-//                         viewBox="0 0 24 24"
-//                         strokeWidth="1.5"
-//                         stroke="currentColor"
-//                         className="w-6 h-6"
-//                     >
-//                         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 5.25h16.5m-12 5.25h7.5m-10.5 5.25h13.5" />
-//                     </svg>
-//                 </button>
-
-//                 <h1 className="text-3xl font-bold text-[#757575] text-center mx-auto">
-//                     Lo que estés buscando, <span className="text-[#35B88E]">encontralo!</span>
-//                 </h1>
-
-//                 {!mostrarFormulario && (
-//                     <button
-//                         onClick={() => setMostrarFormulario(true)}
-//                         className="bg-[#35B88E] text-white px-4 py-2 rounded-md font-semibold hover:bg-green-600"
-//                     >
-//                         + Publicar
-//                     </button>
-//                 )}
-//             </div>
-
-//             {/* Formulario para agregar una nueva publicación */}
-//             {mostrarFormulario && (
-//                 <div className="fixed inset-0 z-20 flex items-center justify-center">
-//                     <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-lg w-11/12 sm:w-2/3 lg:w-1/3">
-//                         <div className="mb-4">
-//                             <label className="block text-lg font-semibold mb-2">Título</label>
-//                             <input
-//                                 type="text"
-//                                 value={titulo}
-//                                 onChange={(e) => setTitulo(e.target.value)}
-//                                 className="w-full p-2 border border-gray-300 rounded text-gray-700"
-//                                 placeholder="Ingrese el título"
-//                             />
-//                         </div>
-//                         <div className="mb-4">
-//                             <label className="block text-lg font-semibold mb-2">Descripción</label>
-//                             <textarea
-//                                 value={descripcion}
-//                                 onChange={(e) => setDescripcion(e.target.value)}
-//                                 className="w-full p-2 border border-gray-300 rounded text-gray-700"
-//                                 placeholder="Ingrese una descripción"
-//                             />
-//                         </div>
-//                         <div className="mb-4">
-//                             <label className="block text-lg font-semibold mb-2">Imagen</label>
-//                             <input
-//                                 type="file"
-//                                 onChange={(e) => {
-//                                     if (e.target.files) {
-//                                         setImagen(e.target.files[0]);
-//                                     }
-//                                 }}
-//                                 className="w-full p-2 border border-gray-300 rounded"
-//                             />
-//                         </div>
-//                         <div className="flex justify-end">
-//                             <button
-//                                 type="submit"
-//                                 className="bg-[#35B88E] text-white px-4 py-2 rounded-md font-semibold hover:bg-green-600"
-//                             >
-//                                 Publicar
-//                             </button>
-//                             <button
-//                                 type="button"
-//                                 onClick={() => setMostrarFormulario(false)}
-//                                 className="ml-4 bg-red-500 text-white px-4 py-2 rounded-md font-semibold hover:bg-red-600"
-//                             >
-//                                 Cancelar
-//                             </button>
-//                         </div>
-//                     </form>
-//                 </div>
-//             )}
-
-//             {/* Publicaciones */}
-//             <div className="mt-8">
-//                 {publicaciones.length === 0 ? (
-//                     <div className="text-center text-[#757575] text-xl">
-//                         No hay publicaciones en este momento.
-//                     </div>
-//                 ) : (
-//                     <>
-//                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-//                             {publicacionesActuales.map((publicacion) => (
-//                                 <div
-//                                     key={publicacion.id}
-//                                     className="border border-gray-300 p-4 rounded-lg shadow-md cursor-pointer"
-//                                     onClick={() => abrirPopUp(publicacion)}
-//                                 >
-//                                     <img
-//                                         src={publicacion.imagen}
-//                                         alt={publicacion.titulo}
-//                                         className="w-full h-48 object-cover rounded-md mb-4 min-h-[400px]"
-//                                     />
-//                                     <h3 className="text-xl font-bold text-gray-800">{publicacion.titulo}</h3>
-//                                     <p className="mt-2 text-gray-600">{publicacion.descripcion}</p>
-//                                 </div>
-//                             ))}
-//                         </div>
-
-//                         {/* Paginación */}
-//                         <div className="flex justify-center mt-28">
-//                             <button
-//                                 onClick={paginaAnterior}
-//                                 disabled={currentPage === 1}
-//                                 className="bg-[#35B88E] text-white px-4 py-2 rounded-md font-semibold hover:bg-green-600 disabled:opacity-50"
-//                             >
-//                                 Anterior
-//                             </button>
-//                             <span className="mx-4 text-gray-600">{currentPage} de {totalPaginas}</span>
-//                             <button
-//                                 onClick={siguientePagina}
-//                                 disabled={currentPage === totalPaginas}
-//                                 className="bg-[#35B88E] text-white px-4 py-2 rounded-md font-semibold hover:bg-green-600 disabled:opacity-50"
-//                             >
-//                                 Siguiente
-//                             </button>
-//                         </div>
-//                     </>
-//                 )}
-//             </div>
-
-//             {/* Pop-up de detalles */}
-//             {mostrarPopUp && publicacionSeleccionada && (
-//                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-20">
-//                     <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 sm:w-2/3 lg:w-1/3">
-//                         <img
-//                             src={publicacionSeleccionada.imagen}
-//                             alt={publicacionSeleccionada.titulo}
-//                             className="w-full h-48 object-cover rounded-md mb-4 min-h-[500px]"
-//                         />
-//                         <h3 className="text-2xl font-bold text-gray-800">{publicacionSeleccionada.titulo}</h3>
-//                         <p className="mt-2 text-gray-600">{publicacionSeleccionada.descripcion}</p>
-//                         <button
-//                             onClick={cerrarPopUp}
-//                             className="mt-4 bg-[#35B88E] text-white px-4 py-2 rounded-md font-semibold hover:bg-green-600"
-//                         >
-//                             Cerrar
-//                         </button>
-//                     </div>
-//                 </div>
-//             )}
-//         </div>
-//     );
-// };
-
-// export default Publicaciones;
-
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSession } from "next-auth/react";
+import { useRouter } from 'next/navigation';
+
+
+
 
 interface Publicacion {
     id: number;
     titulo: string;
     descripcion: string;
-    imagen: string;
-    categoria: string; // Nueva propiedad
+    imagenes: string[];
+    categoria: string;
+    userId: string; // Añadido para identificar al autor
+    precio: string;
+    pausada?: boolean;
 }
 
 const Publicaciones = () => {
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
     const [titulo, setTitulo] = useState('');
     const [descripcion, setDescripcion] = useState('');
-    const [imagen, setImagen] = useState<File | null>(null);
-    const [categoria, setCategoria] = useState(''); // Estado para la categoría de la publicación
+    const [imagenes, setImagenes] = useState<File[]>([]);
+    const [categoria, setCategoria] = useState('');
+    const [precio, setPrecio] = useState('');
     const [publicaciones, setPublicaciones] = useState<Publicacion[]>([]);
     const [publicacionSeleccionada, setPublicacionSeleccionada] = useState<Publicacion | null>(null);
     const [mostrarPopUp, setMostrarPopUp] = useState(false);
-    const [categoriaBusqueda, setCategoriaBusqueda] = useState(''); // Estado para la búsqueda por categoría
-
+    const [categoriaBusqueda, setCategoriaBusqueda] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const publicacionesPorPagina = 6;
+    const publicacionesPorPagina = 18;
+    const { data: session } = useSession();
+    const user = session?.user ? { id: session.user.id } : null;
+
+
 
     useEffect(() => {
         const publicacionesGuardadas = localStorage.getItem('publicaciones');
@@ -305,39 +56,106 @@ const Publicaciones = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!titulo || !descripcion || !imagen || !categoria) {
+        if (!titulo || !descripcion || imagenes.length === 0 || !categoria) {
             alert('Por favor completa todos los campos.');
             return;
         }
 
-        const reader = new FileReader();
-        reader.onloadend = () => {
+        if (!user) {
+            alert('Necesitas estar logueado para publicar.');
+            return;
+        }
+
+        const leerImagenes = async () => {
+            const imagenesBase64: string[] = await Promise.all(
+                imagenes.map((imagen) => {
+                    return new Promise<string>((resolve) => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => resolve(reader.result as string);
+                        reader.readAsDataURL(imagen);
+                    });
+                })
+            );
+
             const nuevaPublicacion: Publicacion = {
                 id: Date.now(),
                 titulo,
                 descripcion,
-                imagen: reader.result as string,
-                categoria, // Asignar la categoría seleccionada
+                imagenes: imagenesBase64,
+                categoria,
+                userId: user.id,
+                precio,
             };
 
             setPublicaciones([nuevaPublicacion, ...publicaciones]);
-
             setTitulo('');
             setDescripcion('');
-            setImagen(null);
-            setCategoria(''); // Reiniciar la categoría seleccionada
+            setImagenes([]);
+            setCategoria('');
             setMostrarFormulario(false);
+            setPrecio('');
         };
 
-        if (imagen) {
-            reader.readAsDataURL(imagen);
+        leerImagenes();
+    };
+
+
+    const eliminarPublicacion = (id: number) => {
+        const publicacionAEliminar = publicaciones.find(pub => pub.id === id);
+        if (publicacionAEliminar && publicacionAEliminar.userId === user?.id) {
+            setPublicaciones(publicaciones.filter(pub => pub.id !== id));
+        } else {
+            alert('No puedes eliminar esta publicación.');
         }
     };
 
-    const abrirPopUp = (publicacion: Publicacion) => {
-        setPublicacionSeleccionada(publicacion);
-        setMostrarPopUp(true);
+
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            const nuevasImagenes = Array.from(e.target.files);
+            if (imagenes.length + nuevasImagenes.length > 7) {
+                alert('Solo puedes subir hasta 7 imágenes.');
+                return;
+            }
+            setImagenes([...imagenes, ...nuevasImagenes]);
+        }
     };
+
+    const eliminarImagen = (index: number) => {
+        setImagenes(imagenes.filter((_, i) => i !== index));
+    };
+
+
+
+
+    useEffect(() => {
+        const publicacionesGuardadas = localStorage.getItem('publicaciones');
+        if (publicacionesGuardadas) {
+            try {
+                setPublicaciones(JSON.parse(publicacionesGuardadas));
+            } catch (error) {
+                console.error("Error al parsear publicaciones guardadas: ", error);
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        if (publicaciones.length > 0) {
+            localStorage.setItem('publicaciones', JSON.stringify(publicaciones));
+        }
+    }, [publicaciones]);
+
+
+
+
+
+    const router = useRouter();
+
+    const irADetallePublicacion = (publicacion: Publicacion) => {
+        router.push(`/publicacion/${publicacion.id}`);
+    };
+
 
     const cerrarPopUp = () => {
         setPublicacionSeleccionada(null);
@@ -348,10 +166,14 @@ const Publicaciones = () => {
     const indiceUltimaPublicacion = currentPage * publicacionesPorPagina;
     const indicePrimeraPublicacion = indiceUltimaPublicacion - publicacionesPorPagina;
 
-    // Filtrar publicaciones por categoría
+    // const publicacionesFiltradas = categoriaBusqueda
+    //     ? publicaciones.filter((pub) => pub.categoria === categoriaBusqueda)
+    //     : publicaciones;
+
     const publicacionesFiltradas = categoriaBusqueda
-        ? publicaciones.filter((pub) => pub.categoria === categoriaBusqueda)
-        : publicaciones;
+        ? publicaciones.filter(pub => pub.categoria === categoriaBusqueda && !pub.pausada)
+        : publicaciones.filter(pub => !pub.pausada);
+
 
     const publicacionesActuales = publicacionesFiltradas.slice(indicePrimeraPublicacion, indiceUltimaPublicacion);
 
@@ -367,16 +189,56 @@ const Publicaciones = () => {
         }
     };
 
+
+
+    useEffect(() => {
+        if (mostrarPopUp) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, [mostrarPopUp]);
+
+
+
+
+    useEffect(() => {
+        if (mostrarFormulario) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, [mostrarFormulario]);
+
+
+    const togglePausarPublicacion = (id: number) => {
+        setPublicaciones(prevPublicaciones =>
+            prevPublicaciones.map(pub =>
+                pub.id === id ? { ...pub, pausada: !pub.pausada } : pub
+            )
+        );
+    };
+
+
+
+
     return (
+
+        // Parte superior de la pagina (Categorias, H1 y boton "Publicar"):
         <div className="container mx-auto px-4 py-8">
-            {/* Fondo blur al abrir el formulario */}
             {mostrarFormulario && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-10"></div>
             )}
 
-            {/* Sección superior */}
             <div className="flex justify-between items-center mb-6">
-                {/* Botón para buscar por categoría */}
                 <div className="mb-5">
                     <label className="block text-lg font-semibold">Filtrar por categoría</label>
                     <select
@@ -393,90 +255,120 @@ const Publicaciones = () => {
                     </select>
                 </div>
 
-                <h1 className="text-3xl font-bold text-[#757575] text-center mx-auto">
+                <h1 className="hidden lg:block text-3xl font-bold text-[#757575] text-center mx-auto">
                     Lo que estés buscando, <span className="text-[#35B88E]">encontralo!</span>
                 </h1>
 
                 {!mostrarFormulario && (
                     <button
-                        onClick={() => setMostrarFormulario(true)}
-                        className="bg-[#35B88E] text-white px-4 py-2 rounded-md font-semibold hover:bg-green-600"
+                        onClick={() => {
+                            if (!user) {
+                                alert('Necesitas estar logueado para publicar.');
+                            } else {
+                                setMostrarFormulario(true);
+                            }
+                        }}
+                        className="bg-[#35B88E] text-white px-4 py-2 rounded-md font-semibold hover:bg-[#2a9675]"
                     >
                         + Publicar
                     </button>
                 )}
             </div>
 
-            {/* Formulario para agregar una nueva publicación */}
+
+
             {mostrarFormulario && (
-                <div className="fixed inset-0 z-20 flex items-center justify-center">
-                    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-lg w-11/12 sm:w-2/3 lg:w-1/3">
-                        <div className="mb-4">
-                            <label className="block text-lg font-semibold mb-2">Título</label>
-                            <input
-                                type="text"
-                                value={titulo}
-                                onChange={(e) => setTitulo(e.target.value)}
-                                className="w-full p-2 border border-gray-300 rounded text-gray-700"
-                                placeholder="Ingrese el título"
-                            />
+                <div className="fixed inset-0 bg-gray-500 bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
+                    onClick={() => setMostrarFormulario(false)}
+                >
+                    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-lg w-11/12 sm:w-2/3 lg:w-1/3"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <label className="block text-lg font-semibold mb-2 text-[#757575]">Título</label>
+                        <input
+                            type="text"
+                            value={titulo}
+                            onChange={(e) => setTitulo(e.target.value)}
+                            className="w-full p-2 border border-gray-300 rounded text-gray-700 mb-4"
+                            placeholder="Ingrese el título"
+                        />
+
+                        <label className="block text-lg font-semibold mb-2 text-[#757575]">Descripción</label>
+                        <textarea
+                            value={descripcion}
+                            onChange={(e) => setDescripcion(e.target.value)}
+                            className="w-full p-2 border border-gray-300 rounded text-gray-700 mb-4"
+                            placeholder="Ingrese una descripción"
+                        />
+
+                        <label className="block text-lg font-semibold mb-2 text-[#757575]">Imágenes (máximo 7)</label>
+                        <input
+                            type="file"
+                            multiple
+                            onChange={handleFileChange}
+                            className="w-full p-2 border border-gray-300 rounded mb-2"
+                        />
+                        <div className="flex flex-wrap gap-2">
+                            {imagenes.map((img, index) => (
+                                <div key={index} className="relative">
+                                    <img
+                                        src={URL.createObjectURL(img)}
+                                        alt={`Imagen ${index + 1}`}
+                                        className="w-20 h-20 object-cover rounded-md"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => eliminarImagen(index)}
+                                        className="absolute top-0 right-0 bg-red-500 text-white p-1 text-xs rounded-full"
+                                    >
+                                        X
+                                    </button>
+                                </div>
+                            ))}
                         </div>
-                        <div className="mb-4">
-                            <label className="block text-lg font-semibold mb-2">Descripción</label>
-                            <textarea
-                                value={descripcion}
-                                onChange={(e) => setDescripcion(e.target.value)}
-                                className="w-full p-2 border border-gray-300 rounded text-gray-700"
-                                placeholder="Ingrese una descripción"
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <label className="block text-lg font-semibold mb-2">Imagen</label>
+
+                        <label className="block text-lg font-semibold mb-2 text-[#757575] mt-3">Categoría</label>
+                        <select
+                            value={categoria}
+                            onChange={(e) => setCategoria(e.target.value)}
+                            className="w-full p-2 border border-gray-300 rounded text-gray-700 mb-4"
+                        >
+                            <option value="">Selecciona una categoría</option>
+                            <option value="Pie">Pie</option>
+                            <option value="Pierna">Pierna</option>
+                            <option value="Brazo">Brazo</option>
+                            <option value="Mano">Mano</option>
+                            <option value="Muñeca">Muñeca</option>
+                        </select>
+
+                        <label className="block text-lg font-semibold mb-2 text-[#757575] mt-2">Precio del alquiler por semana</label>
+                        <div className="relative w-full">
+                            <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-[#757575]">$
+                            </span>
                             <input
-                                type="file"
-                                onChange={(e) => {
-                                    if (e.target.files) {
-                                        setImagen(e.target.files[0]);
-                                    }
+                                type="number"
+                                value={precio}
+                                onChange={(e) => setPrecio(e.target.value)}
+                                className="w-full p-2 pl-6 border border-gray-300 rounded text-[#757575]"
+                                min="0"
+                                onKeyDown={(e) => {
+                                    if (e.key === '-' || e.key === 'e') e.preventDefault();
                                 }}
-                                className="w-full p-2 border border-gray-300 rounded"
                             />
                         </div>
-                        <div className="mb-4">
-                            <label className="block text-lg font-semibold mb-2">Categoría</label>
-                            <select
-                                value={categoria}
-                                onChange={(e) => setCategoria(e.target.value)}
-                                className="w-full p-2 border border-gray-300 rounded text-gray-700"
-                            >
-                                <option value="">Selecciona una categoría</option>
-                                <option value="Pie">Pie</option>
-                                <option value="Pierna">Pierna</option>
-                                <option value="Brazo">Brazo</option>
-                                <option value="Mano">Mano</option>
-                                <option value="Muñeca">Muñeca</option>
-                            </select>
-                        </div>
-                        <div className="flex justify-end">
-                            <button
-                                type="submit"
-                                className="bg-[#35B88E] text-white px-4 py-2 rounded-md font-semibold hover:bg-green-600"
-                            >
-                                Publicar
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setMostrarFormulario(false)}
-                                className="ml-4 bg-red-500 text-white px-4 py-2 rounded-md font-semibold hover:bg-red-600"
-                            >
-                                Cancelar
-                            </button>
-                        </div>
+
+
+
+                        <button type="submit" className="bg-[#35B88E] text-white px-4 py-2 rounded-md font-semibold hover:bg-green-600 mt-6">
+                            Publicar
+                        </button>
                     </form>
                 </div>
             )}
 
-            {/* Publicaciones */}
+
+
+            {/* Lo que se ve cuando se entra a la pagina: */}
             <div className="mt-8">
                 {publicacionesFiltradas.length === 0 ? (
                     <div className="text-center text-[#757575] text-xl">
@@ -484,26 +376,46 @@ const Publicaciones = () => {
                     </div>
                 ) : (
                     <>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
                             {publicacionesActuales.map((publicacion) => (
                                 <div
                                     key={publicacion.id}
-                                    className="border border-gray-300 p-4 rounded-lg shadow-md cursor-pointer"
-                                    onClick={() => abrirPopUp(publicacion)}
+                                    className="border border-gray-300 p-2 rounded-lg shadow-sm cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
+                                    onClick={() => irADetallePublicacion(publicacion)}
                                 >
                                     <img
-                                        src={publicacion.imagen}
+
+                                        src={Array.isArray(publicacion.imagenes) && publicacion.imagenes.length > 0 ? publicacion.imagenes[0] : "/placeholder.jpg"}
                                         alt={publicacion.titulo}
-                                        className="w-full h-48 object-cover rounded-md mb-4 min-h-[400px]"
+                                        className="w-full h-32 object-cover rounded-md mb-2"
                                     />
-                                    <h3 className="text-xl font-bold text-gray-800">{publicacion.titulo}</h3>
-                                    <p className="mt-2 text-gray-600">{publicacion.descripcion}</p>
-                                    <p className="mt-1 text-sm text-gray-500">Categoría: {publicacion.categoria}</p>
+                                    <h3 className="text-sm font-semibold text-[#757575]">{publicacion.titulo}</h3>
+                                    <p className="mt-1 text-xs text-[#757575]">{publicacion.descripcion}</p>
+                                    <p className="mt-1 text-[10px] text-gray-500">Categoría: {publicacion.categoria}</p>
+                                    {publicacion.userId === user?.id && (
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                const confirmDelete = window.confirm("¿Estás seguro que quieres eliminar? Perderás todo lo que la publicación conlleva.");
+                                                if (confirmDelete) {
+                                                    eliminarPublicacion(publicacion.id);
+                                                }
+                                            }}
+                                            className="mt-1 text-[10px] text-red-500"
+                                        >
+                                            Eliminar
+                                        </button>
+                                    )}
                                 </div>
                             ))}
                         </div>
 
-                        {/* Paginación */}
+
+
+
+
+                        {/* Paginado: */}
                         <div className="flex justify-center mt-28">
                             <button
                                 onClick={paginaAnterior}
@@ -520,36 +432,20 @@ const Publicaciones = () => {
                                 Siguiente
                             </button>
                         </div>
+                        {/* Fin del paginado */}
                     </>
                 )}
             </div>
 
-            {/* Pop-up para ver detalles de la publicación */}
-            {mostrarPopUp && publicacionSeleccionada && (
-                <div className="fixed inset-0 flex items-center justify-center z-30">
-                    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" onClick={cerrarPopUp}></div>
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 sm:w-2/3 lg:w-1/3 z-40">
-                        <img
-                            src={publicacionSeleccionada.imagen}
-                            alt={publicacionSeleccionada.titulo}
-                            className="w-full h-64 object-cover rounded-md mb-4 min-h-[550px]"
-                        />
-                        <h2 className="text-2xl font-bold mb-2">{publicacionSeleccionada.titulo}</h2>
-                        <p className="mb-4">{publicacionSeleccionada.descripcion}</p>
-                        <p className="text-sm text-gray-500">Categoría: {publicacionSeleccionada.categoria}</p>
-                        <div className="flex justify-end mt-4">
-                            <button
-                                onClick={cerrarPopUp}
-                                className="bg-red-500 text-white px-4 py-2 rounded-md font-semibold hover:bg-red-600"
-                            >
-                                Cerrar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+
+
+
+
         </div>
     );
 };
 
 export default Publicaciones;
+
+
+
