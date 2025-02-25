@@ -16,7 +16,7 @@ import 'swiper/css/navigation';
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 
 interface Publicacion {
-    id: number;
+    _id: string;
     titulo: string;
     descripcion: string;
     imagenes: string[];
@@ -142,25 +142,25 @@ const DetallePublicacion = () => {
 
 
 
-    const togglePausarPublicacion = () => {
-        if (!publicacion) return;
+    // const togglePausarPublicacion = () => {
+    //     if (!publicacion) return;
 
-        const publicacionesGuardadas = localStorage.getItem('publicaciones');
-        if (!publicacionesGuardadas) return;
+    //     const publicacionesGuardadas = localStorage.getItem('publicaciones');
+    //     if (!publicacionesGuardadas) return;
 
-        let publicaciones: Publicacion[] = JSON.parse(publicacionesGuardadas);
+    //     let publicaciones: Publicacion[] = JSON.parse(publicacionesGuardadas);
 
-        // Encontrar la publicación y actualizar su estado de pausada
-        publicaciones = publicaciones.map(pub =>
-            pub.id === publicacion.id ? { ...pub, pausada: !pub.pausada } : pub
-        );
+    //     // Encontrar la publicación y actualizar su estado de pausada
+    //     publicaciones = publicaciones.map(pub =>
+    //         pub._id === publicacion._id ? { ...pub, pausada: !pub.pausada } : pub
+    //     );
 
-        // Guardar los cambios en localStorage
-        localStorage.setItem('publicaciones', JSON.stringify(publicaciones));
+    //     // Guardar los cambios en localStorage
+    //     localStorage.setItem('publicaciones', JSON.stringify(publicaciones));
 
-        // Actualizar el estado en React para reflejar el cambio
-        setPublicacion((prev) => prev ? { ...prev, pausada: !prev.pausada } : null);
-    };
+    //     // Actualizar el estado en React para reflejar el cambio
+    //     setPublicacion((prev) => prev ? { ...prev, pausada: !prev.pausada } : null);
+    // };
 
 
 
@@ -211,11 +211,11 @@ const DetallePublicacion = () => {
 
 
     useEffect(() => {
-        if (!publicacion?.id) return; // Evita hacer la petición si no hay ID
+        if (!publicacion?._id) return; // Evita hacer la petición si no hay ID
 
         const cargarMensajes = async () => {
             try {
-                const res = await fetch(`/api/mensajes?publicacionId=${publicacion.id}`);
+                const res = await fetch(`/api/mensajes?publicacionId=${publicacion._id}`);
                 if (!res.ok) {
                     throw new Error("Error al obtener mensajes");
                 }
@@ -237,7 +237,7 @@ const DetallePublicacion = () => {
         };
 
         cargarMensajes();
-    }, [publicacion?.id]);
+    }, [publicacion?._id]);
 
 
 
@@ -267,34 +267,76 @@ const DetallePublicacion = () => {
 
 
 
+    // useEffect(() => {
+    //     if (!id) return;
+
+    //     const publicacionesGuardadas = localStorage.getItem('publicaciones');
+    //     if (publicacionesGuardadas) {
+    //         const publicaciones: Publicacion[] = JSON.parse(publicacionesGuardadas);
+    //         const encontrada = publicaciones.find(pub => pub.id === Number(id));
+    //         if (encontrada) {
+    //             setPublicacion(encontrada);
+    //         }
+    //     }
+
+    //     const fetchMensajes = async () => {
+    //         try {
+    //             const res = await fetch(`/api/mensajes?publicacionId=${String(id)}`);
+    //             if (!res.ok) throw new Error("Error al obtener mensajes");
+    //             const data = await res.json();
+
+    //             console.log("Mensajes cargados:", data);
+
+    //             setMensajes(data);
+    //         } catch (error) {
+    //             console.error(error);
+    //         }
+    //     };
+
+    //     fetchMensajes();
+    // }, [id]);
+
+
     useEffect(() => {
         if (!id) return;
 
-        const publicacionesGuardadas = localStorage.getItem('publicaciones');
-        if (publicacionesGuardadas) {
-            const publicaciones: Publicacion[] = JSON.parse(publicacionesGuardadas);
-            const encontrada = publicaciones.find(pub => pub.id === Number(id));
-            if (encontrada) {
-                setPublicacion(encontrada);
+        // Función para obtener la publicación desde la API
+        const fetchPublicacion = async () => {
+            try {
+                const res = await fetch(`/api/publicaciones/${id}`);
+                if (!res.ok) {
+                    throw new Error("Error al obtener la publicación");
+                }
+                const json = await res.json();
+                if (json.success) {
+                    setPublicacion(json.data);
+                } else {
+                    console.error("Error en la respuesta de la API:", json.error);
+                }
+            } catch (error) {
+                console.error("Error al obtener la publicación:", error);
             }
-        }
+        };
 
+        // Función para obtener los mensajes
         const fetchMensajes = async () => {
             try {
                 const res = await fetch(`/api/mensajes?publicacionId=${String(id)}`);
                 if (!res.ok) throw new Error("Error al obtener mensajes");
                 const data = await res.json();
-
                 console.log("Mensajes cargados:", data);
-
                 setMensajes(data);
             } catch (error) {
                 console.error(error);
             }
         };
 
+        fetchPublicacion();
         fetchMensajes();
     }, [id]);
+
+
+
 
     const agregarPregunta = async () => {
         if (!nuevaPregunta.trim() || !session?.user) return;
@@ -439,7 +481,7 @@ const DetallePublicacion = () => {
                         </button>
                     )}
 
-                    {session?.user?.id === publicacion.userId && (
+                    {/* {session?.user?.id === publicacion.userId && (
                         <button
                             onClick={togglePausarPublicacion}
                             className="px-4 py-2 bg-[#35B88E] text-white rounded-lg hover:bg-[#2a9675] transition mt-10"
@@ -447,7 +489,7 @@ const DetallePublicacion = () => {
                         >
                             {publicacion.pausada ? 'Reanudar' : 'Marcar como prestado'}
                         </button>
-                    )}
+                    )} */}
 
 
 
