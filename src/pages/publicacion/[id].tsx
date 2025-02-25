@@ -481,7 +481,7 @@ const DetallePublicacion = () => {
                         </button>
                     )}
 
-                    {session?.user?.id === publicacion.userId && (
+                    {/* {session?.user?.id === publicacion.userId && (
                         <button
                             onClick={togglePausarPublicacion}
                             className="px-4 py-2 bg-[#35B88E] text-white rounded-lg hover:bg-[#2a9675] transition mt-10"
@@ -489,7 +489,7 @@ const DetallePublicacion = () => {
                         >
                             {publicacion.pausada ? 'Reanudar' : 'Marcar como prestado'}
                         </button>
-                    )}
+                    )} */}
 
 
 
