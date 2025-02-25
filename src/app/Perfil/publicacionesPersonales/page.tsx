@@ -145,14 +145,42 @@ const PublicacionesPersonales = () => {
         }
     }, [session]);
 
-    // Función para cambiar el estado de pausada (nota: para persistir el cambio en la BD deberás crear un endpoint para actualizar la publicación)
-    const togglePausarPublicacion = (_id: string) => {
-        setPublicacionesUsuario((prevPublicaciones) =>
-            prevPublicaciones.map((pub) =>
-                pub._id === _id ? { ...pub, pausada: !pub.pausada } : pub
-            )
-        );
+    // // Función para cambiar el estado de pausada (nota: para persistir el cambio en la BD deberás crear un endpoint para actualizar la publicación)
+    // const togglePausarPublicacion = (_id: string) => {
+    //     setPublicacionesUsuario((prevPublicaciones) =>
+    //         prevPublicaciones.map((pub) =>
+    //             pub._id === _id ? { ...pub, pausada: !pub.pausada } : pub
+    //         )
+    //     );
+    // };
+
+    const togglePausarPublicacion = async (_id: string) => {
+        try {
+            const publicacionActualizada = await fetch(`/api/publicaciones/${_id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    pausada: !publicacionesUsuario.find(pub => pub._id === _id)?.pausada,
+                }),
+            }).then(res => res.json());
+
+            if (!publicacionActualizada.success) {
+                throw new Error(publicacionActualizada.error);
+            }
+
+            // Actualizar el estado con la publicación modificada
+            setPublicacionesUsuario(prevPublicaciones =>
+                prevPublicaciones.map(pub =>
+                    pub._id === _id ? { ...pub, pausada: publicacionActualizada.data.pausada } : pub
+                )
+            );
+        } catch (error) {
+            console.error("Error al actualizar la publicación:", error);
+        }
     };
+
 
     return (
         <div className="container mx-auto px-4 py-8">

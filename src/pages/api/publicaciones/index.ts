@@ -15,8 +15,27 @@ export default async function handler(
     await connectToDatabase();
 
     const { method, query } = req;
+    const { id } = req.query;
 
     switch (method) {
+        case 'PATCH':
+            try {
+                const { pausada } = req.body;
+
+                const publicacion = await Publicacion.findByIdAndUpdate(
+                    id,
+                    { pausada },
+                    { new: true }
+                );
+
+                if (!publicacion) {
+                    return res.status(404).json({ success: false, error: "Publicación no encontrada" });
+                }
+
+                return res.status(200).json({ success: true, data: publicacion });
+            } catch (error: any) {
+                return res.status(500).json({ success: false, error: error.message });
+            }
         case 'GET':
             try {
                 const filter = query.userId ? { userId: query.userId } : {};
