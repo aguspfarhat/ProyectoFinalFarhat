@@ -8,7 +8,7 @@ import Footer from '@/app/componentes/footer';
 import { montserrat } from "@/app/componentes/fonts";
 import "@/app/UI/globals.css";
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper/modules';
+import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
@@ -409,7 +409,7 @@ const DetallePublicacion = () => {
                 )}
                 <button onClick={() => router.back()} className="text-[#757575] mb-4 hover:text-[#35B88E]">← Volver</button>
 
-                <div className="text-center">
+                {/* <div className="text-center">
                     <div className="flex flex-wrap justify-center gap-4 mt-4">
                         <div className="text-center">
                             {publicacion.imagenes.length > 1 ? (
@@ -436,34 +436,81 @@ const DetallePublicacion = () => {
                             </style>
                         </div>
                     </div>
+                </div> */}
+                <div className="text-center">
+                    <div className="flex flex-wrap justify-center gap-4 mt-4">
+                        <div className="text-center">
+                            {publicacion.imagenes.length > 1 ? (
+                                <Swiper
+                                    modules={[Navigation]}
+                                    navigation
+                                    className="w-full max-w-3xl mx-auto mt-4 rounded-lg"
+                                >
+                                    {publicacion.imagenes.map((img, index) => (
+                                        <SwiperSlide key={index}>
+                                            <div className="w-full h-[500px] flex justify-center items-center">
+                                                <img
+                                                    src={img}
+                                                    alt={`Imagen ${index + 1}`}
+                                                    className="object-cover w-full h-full rounded-lg"
+                                                />
+                                            </div>
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
+                            ) : (
+                                <div className="w-full max-w-3xl mx-auto mt-4 rounded-lg h-[500px] flex justify-center items-center">
+                                    <img
+                                        src={publicacion.imagenes[0]}
+                                        alt={publicacion.titulo}
+                                        className="object-cover w-full h-full rounded-lg"
+                                    />
+                                </div>
+                            )}
+                            <style>
+                                {`
+                    .swiper-button-next, .swiper-button-prev {
+                        color: #35B88E !important;
+                    }
+                `}
+                            </style>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="ml-96 flex flex-col">
+
+
+
+
+
+
+                {/* titulo, descripcion, categoria, precio y boton alquilar */}
+
+                <div className="flex flex-col lg:ml-96 ml-4 px-4 lg:px-0">
                     <div className="mt-10">
                         <h1 className="text-3xl font-bold text-[#757575]">{publicacion.titulo}</h1>
                     </div>
 
-                    <hr className="mt-10" style={{ width: '20%', borderTop: '0.5px solid #757575' }} />
+                    <hr className="mt-10 mx-auto lg:mx-0" style={{ width: '20%', borderTop: '0.5px solid #757575' }} />
 
                     <div className="mt-10">
                         <h1 className="text-2xl font-semibold text-[#757575]">Descripcion:</h1>
                         <p className="text-lg text-[#757575]">{publicacion.descripcion}</p>
                     </div>
 
-                    <hr className="mt-10" style={{ width: '20%', borderTop: '1px solid #757575' }} />
+                    <hr className="mt-10 mx-auto lg:mx-0" style={{ width: '20%', borderTop: '1px solid #757575' }} />
 
                     <div className="mt-10">
                         <h1 className="text-2xl font-semibold text-[#757575]">Categoria:</h1>
                         <p className="text-lg text-[#757575]">{publicacion.categoria}</p>
                     </div>
 
-                    <hr className="mt-10" style={{ width: '20%', borderTop: '1px solid #757575' }} />
+                    <hr className="mt-10 mx-auto lg:mx-0" style={{ width: '20%', borderTop: '1px solid #757575' }} />
 
                     <div className="mt-10">
                         <h1 className="text-2xl font-semibold text-[#757575]">Precio por semana:</h1>
                         <p className="text-lg text-[#757575]">${publicacion.precio}</p>
                     </div>
-
 
                     {!alquilarPopUp && (!user || user.id !== publicacion.userId) && (
                         <button
@@ -474,26 +521,19 @@ const DetallePublicacion = () => {
                                     setAlquilarPopUp(true);
                                 }
                             }}
-                            className="bg-[#35B88E] text-white px-4 py-2 rounded-md font-semibold hover:bg-[#2a9675] mt-10"
-                            style={{ width: '20%' }}
+                            className="bg-[#35B88E] text-white px-4 py-2 rounded-md font-semibold hover:bg-[#2a9675] mt-10 mx-auto lg:mx-0"
+                            style={{ width: '100%', maxWidth: '200px' }} // Cambié el width para móviles
                         >
                             Alquilar
                         </button>
                     )}
-
-                    {/* {session?.user?.id === publicacion.userId && (
-                        <button
-                            onClick={togglePausarPublicacion}
-                            className="px-4 py-2 bg-[#35B88E] text-white rounded-lg hover:bg-[#2a9675] transition mt-10"
-                            style={{ width: '20%' }}
-                        >
-                            {publicacion.pausada ? 'Reanudar' : 'Marcar como prestado'}
-                        </button>
-                    )} */}
-
-
-
                 </div>
+
+
+
+
+
+
 
                 {alquilarPopUp && (
                     <div

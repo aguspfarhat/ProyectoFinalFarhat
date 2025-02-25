@@ -60,19 +60,37 @@ const Comunidad = () => {
 
     return (
         <div className="container mx-auto p-4">
-            <div className="relative flex items-center mt-10">
-                {/* Texto centrado */}
-                <h1 className="absolute left-1/2 transform -translate-x-1/2 text-3xl font-bold text-[#757575]">
+            {/* <div className="relative flex items-center mt-10 sm:flex-row flex-col sm:justify-between">
+
+                <h1 className="absolute left-1/2 transform -translate-x-1/2 text-3xl font-bold text-[#757575] sm:text-left sm:w-auto">
                     Comunidad
                 </h1>
-                {/* Botón a la derecha */}
+
                 <button
                     onClick={openPopup}
                     className="ml-auto bg-[#35B88E] text-white font-semibold py-2 px-4 rounded-md hover:bg-[#2a9675]"
                 >
                     Agregar Reseña
                 </button>
+            </div> */}
+
+
+            <div className="relative flex items-center mt-10 sm:flex-row flex-col sm:items-center">
+                {/* Texto centrado solo en móviles */}
+                <h1 className="text-3xl font-bold text-[#757575] sm:absolute sm:left-1/2 sm:transform sm:-translate-x-1/2 text-center">
+                    Comunidad
+                </h1>
+                {/* Botón centrado en móviles y alineado a la derecha en pantallas grandes */}
+                <button
+                    onClick={openPopup}
+                    className="mt-4 sm:mt-0 sm:ml-auto bg-[#35B88E] text-white font-semibold py-2 px-4 rounded-md hover:bg-[#2a9675]"
+                >
+                    Agregar Reseña
+                </button>
             </div>
+
+
+
 
 
             {/* Popup de reseña */}
