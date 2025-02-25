@@ -1,19 +1,246 @@
+// 'use client';
+
+// import { useState, useEffect } from 'react';
+// import { useSession } from "next-auth/react";
+// import { useRouter } from 'next/navigation';
+
+
+
+
+// interface Publicacion {
+//     id: number;
+//     titulo: string;
+//     descripcion: string;
+//     imagenes: string[];
+//     categoria: string;
+//     userId: string; // Añadido para identificar al autor
+//     precio: string;
+//     pausada?: boolean;
+// }
+
+// const Publicaciones = () => {
+//     const [mostrarFormulario, setMostrarFormulario] = useState(false);
+//     const [titulo, setTitulo] = useState('');
+//     const [descripcion, setDescripcion] = useState('');
+//     const [imagenes, setImagenes] = useState<File[]>([]);
+//     const [categoria, setCategoria] = useState('');
+//     const [precio, setPrecio] = useState('');
+//     const [publicaciones, setPublicaciones] = useState<Publicacion[]>([]);
+//     const [publicacionSeleccionada, setPublicacionSeleccionada] = useState<Publicacion | null>(null);
+//     const [mostrarPopUp, setMostrarPopUp] = useState(false);
+//     const [categoriaBusqueda, setCategoriaBusqueda] = useState('');
+//     const [currentPage, setCurrentPage] = useState(1);
+//     const publicacionesPorPagina = 18;
+//     const { data: session } = useSession();
+//     const user = session?.user ? { id: session.user.id } : null;
+
+
+
+//     useEffect(() => {
+//         const publicacionesGuardadas = localStorage.getItem('publicaciones');
+//         if (publicacionesGuardadas) {
+//             try {
+//                 setPublicaciones(JSON.parse(publicacionesGuardadas));
+//             } catch (error) {
+//                 console.error("Error al parsear publicaciones guardadas: ", error);
+//             }
+//         }
+//     }, []);
+
+//     useEffect(() => {
+//         if (publicaciones.length > 0) {
+//             localStorage.setItem('publicaciones', JSON.stringify(publicaciones));
+//         }
+//     }, [publicaciones]);
+
+//     const handleSubmit = (e: React.FormEvent) => {
+//         e.preventDefault();
+
+//         if (!titulo || !descripcion || imagenes.length === 0 || !categoria) {
+//             alert('Por favor completa todos los campos.');
+//             return;
+//         }
+
+//         if (!user) {
+//             alert('Necesitas estar logueado para publicar.');
+//             return;
+//         }
+
+//         const leerImagenes = async () => {
+//             const imagenesBase64: string[] = await Promise.all(
+//                 imagenes.map((imagen) => {
+//                     return new Promise<string>((resolve) => {
+//                         const reader = new FileReader();
+//                         reader.onloadend = () => resolve(reader.result as string);
+//                         reader.readAsDataURL(imagen);
+//                     });
+//                 })
+//             );
+
+//             const nuevaPublicacion: Publicacion = {
+//                 id: Date.now(),
+//                 titulo,
+//                 descripcion,
+//                 imagenes: imagenesBase64,
+//                 categoria,
+//                 userId: user.id,
+//                 precio,
+//             };
+
+//             setPublicaciones([nuevaPublicacion, ...publicaciones]);
+//             setTitulo('');
+//             setDescripcion('');
+//             setImagenes([]);
+//             setCategoria('');
+//             setMostrarFormulario(false);
+//             setPrecio('');
+//         };
+
+//         leerImagenes();
+//     };
+
+
+//     const eliminarPublicacion = (id: number) => {
+//         const publicacionAEliminar = publicaciones.find(pub => pub.id === id);
+//         if (publicacionAEliminar && publicacionAEliminar.userId === user?.id) {
+//             setPublicaciones(publicaciones.filter(pub => pub.id !== id));
+//         } else {
+//             alert('No puedes eliminar esta publicación.');
+//         }
+//     };
+
+
+
+//     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//         if (e.target.files) {
+//             const nuevasImagenes = Array.from(e.target.files);
+//             if (imagenes.length + nuevasImagenes.length > 7) {
+//                 alert('Solo puedes subir hasta 7 imágenes.');
+//                 return;
+//             }
+//             setImagenes([...imagenes, ...nuevasImagenes]);
+//         }
+//     };
+
+//     const eliminarImagen = (index: number) => {
+//         setImagenes(imagenes.filter((_, i) => i !== index));
+//     };
+
+
+
+
+//     useEffect(() => {
+//         const publicacionesGuardadas = localStorage.getItem('publicaciones');
+//         if (publicacionesGuardadas) {
+//             try {
+//                 setPublicaciones(JSON.parse(publicacionesGuardadas));
+//             } catch (error) {
+//                 console.error("Error al parsear publicaciones guardadas: ", error);
+//             }
+//         }
+//     }, []);
+
+//     useEffect(() => {
+//         if (publicaciones.length > 0) {
+//             localStorage.setItem('publicaciones', JSON.stringify(publicaciones));
+//         }
+//     }, [publicaciones]);
+
+
+
+
+
+//     const router = useRouter();
+
+//     const irADetallePublicacion = (publicacion: Publicacion) => {
+//         router.push(`/publicacion/${publicacion.id}`);
+//     };
+
+
+//     const cerrarPopUp = () => {
+//         setPublicacionSeleccionada(null);
+//         setMostrarPopUp(false);
+//     };
+
+//     const totalPaginas = Math.ceil(publicaciones.length / publicacionesPorPagina);
+//     const indiceUltimaPublicacion = currentPage * publicacionesPorPagina;
+//     const indicePrimeraPublicacion = indiceUltimaPublicacion - publicacionesPorPagina;
+
+//     // const publicacionesFiltradas = categoriaBusqueda
+//     //     ? publicaciones.filter((pub) => pub.categoria === categoriaBusqueda)
+//     //     : publicaciones;
+
+//     const publicacionesFiltradas = categoriaBusqueda
+//         ? publicaciones.filter(pub => pub.categoria === categoriaBusqueda && !pub.pausada)
+//         : publicaciones.filter(pub => !pub.pausada);
+
+
+//     const publicacionesActuales = publicacionesFiltradas.slice(indicePrimeraPublicacion, indiceUltimaPublicacion);
+
+//     const siguientePagina = () => {
+//         if (currentPage < totalPaginas) {
+//             setCurrentPage(prev => prev + 1);
+//         }
+//     };
+
+//     const paginaAnterior = () => {
+//         if (currentPage > 1) {
+//             setCurrentPage(prev => prev - 1);
+//         }
+//     };
+
+
+
+//     useEffect(() => {
+//         if (mostrarPopUp) {
+//             document.body.style.overflow = 'hidden';
+//         } else {
+//             document.body.style.overflow = 'auto';
+//         }
+
+//         return () => {
+//             document.body.style.overflow = 'auto';
+//         };
+//     }, [mostrarPopUp]);
+
+
+
+
+//     useEffect(() => {
+//         if (mostrarFormulario) {
+//             document.body.style.overflow = 'hidden';
+//         } else {
+//             document.body.style.overflow = 'auto';
+//         }
+
+//         return () => {
+//             document.body.style.overflow = 'auto';
+//         };
+//     }, [mostrarFormulario]);
+
+
+//     const togglePausarPublicacion = (id: number) => {
+//         setPublicaciones(prevPublicaciones =>
+//             prevPublicaciones.map(pub =>
+//                 pub.id === id ? { ...pub, pausada: !pub.pausada } : pub
+//             )
+//         );
+//     };
+
 'use client';
 
 import { useState, useEffect } from 'react';
 import { useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
 
-
-
-
+// Actualizamos la interfaz para usar _id (string) en lugar de id (number)
 interface Publicacion {
-    id: number;
+    _id: string;
     titulo: string;
     descripcion: string;
     imagenes: string[];
     categoria: string;
-    userId: string; // Añadido para identificar al autor
+    userId: string; // Para identificar al autor
     precio: string;
     pausada?: boolean;
 }
@@ -33,27 +260,29 @@ const Publicaciones = () => {
     const publicacionesPorPagina = 18;
     const { data: session } = useSession();
     const user = session?.user ? { id: session.user.id } : null;
+    const router = useRouter();
 
-
-
+    // ─── 1. Obtener publicaciones desde la API ──────────────────────────────
     useEffect(() => {
-        const publicacionesGuardadas = localStorage.getItem('publicaciones');
-        if (publicacionesGuardadas) {
+        const fetchPublicaciones = async () => {
             try {
-                setPublicaciones(JSON.parse(publicacionesGuardadas));
+                const res = await fetch('/api/publicaciones');
+                const json = await res.json();
+                if (json.success) {
+                    setPublicaciones(json.data);
+                } else {
+                    console.error("Error al obtener publicaciones:", json.error);
+                }
             } catch (error) {
-                console.error("Error al parsear publicaciones guardadas: ", error);
+                console.error("Error al obtener publicaciones:", error);
             }
-        }
+        };
+
+        fetchPublicaciones();
     }, []);
 
-    useEffect(() => {
-        if (publicaciones.length > 0) {
-            localStorage.setItem('publicaciones', JSON.stringify(publicaciones));
-        }
-    }, [publicaciones]);
-
-    const handleSubmit = (e: React.FormEvent) => {
+    // ─── 2. Crear publicación (handleSubmit) ──────────────────────────────
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!titulo || !descripcion || imagenes.length === 0 || !categoria) {
@@ -66,7 +295,8 @@ const Publicaciones = () => {
             return;
         }
 
-        const leerImagenes = async () => {
+        try {
+            // Convertir las imágenes a Base64
             const imagenesBase64: string[] = await Promise.all(
                 imagenes.map((imagen) => {
                     return new Promise<string>((resolve) => {
@@ -77,8 +307,8 @@ const Publicaciones = () => {
                 })
             );
 
-            const nuevaPublicacion: Publicacion = {
-                id: Date.now(),
+            // Crear la nueva publicación (sin el campo _id; lo genera la BD)
+            const nuevaPublicacion = {
                 titulo,
                 descripcion,
                 imagenes: imagenesBase64,
@@ -87,30 +317,62 @@ const Publicaciones = () => {
                 precio,
             };
 
-            setPublicaciones([nuevaPublicacion, ...publicaciones]);
+            const res = await fetch('/api/publicaciones', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(nuevaPublicacion)
+            });
+
+            const json = await res.json();
+            if (!json.success) {
+                throw new Error(json.error);
+            }
+
+            // Agregar la publicación creada (json.data) al estado
+            setPublicaciones((prev) => [json.data, ...prev]);
+
+            // Limpiar los campos del formulario
             setTitulo('');
             setDescripcion('');
             setImagenes([]);
             setCategoria('');
-            setMostrarFormulario(false);
             setPrecio('');
-        };
-
-        leerImagenes();
+            setMostrarFormulario(false);
+        } catch (error) {
+            console.error("Error creando publicación:", error);
+            alert("Hubo un problema al crear la publicación.");
+        }
     };
 
-
-    const eliminarPublicacion = (id: number) => {
-        const publicacionAEliminar = publicaciones.find(pub => pub.id === id);
+    // ─── 3. Eliminar publicación ──────────────────────────────
+    const eliminarPublicacion = async (_id: string) => {
+        const publicacionAEliminar = publicaciones.find(pub => pub._id === _id);
         if (publicacionAEliminar && publicacionAEliminar.userId === user?.id) {
-            setPublicaciones(publicaciones.filter(pub => pub.id !== id));
+            const confirmDelete = window.confirm("¿Estás seguro que quieres eliminar? Perderás todo lo que la publicación conlleva.");
+            if (!confirmDelete) return;
+
+            try {
+                const response = await fetch(`/api/publicaciones/${_id}`, {
+                    method: 'DELETE',
+                });
+                const json = await response.json();
+                if (!json.success) {
+                    throw new Error(json.error);
+                }
+                // Actualizar el estado eliminando la publicación borrada
+                setPublicaciones((prev) => prev.filter(pub => pub._id !== _id));
+            } catch (error) {
+                console.error("Error eliminando publicación:", error);
+                alert("Hubo un problema al eliminar la publicación.");
+            }
         } else {
             alert('No puedes eliminar esta publicación.');
         }
     };
 
-
-
+    // ─── 4. Manejo de selección y eliminación de imágenes ──────────────────────────────
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const nuevasImagenes = Array.from(e.target.files);
@@ -126,36 +388,10 @@ const Publicaciones = () => {
         setImagenes(imagenes.filter((_, i) => i !== index));
     };
 
-
-
-
-    useEffect(() => {
-        const publicacionesGuardadas = localStorage.getItem('publicaciones');
-        if (publicacionesGuardadas) {
-            try {
-                setPublicaciones(JSON.parse(publicacionesGuardadas));
-            } catch (error) {
-                console.error("Error al parsear publicaciones guardadas: ", error);
-            }
-        }
-    }, []);
-
-    useEffect(() => {
-        if (publicaciones.length > 0) {
-            localStorage.setItem('publicaciones', JSON.stringify(publicaciones));
-        }
-    }, [publicaciones]);
-
-
-
-
-
-    const router = useRouter();
-
+    // ─── 5. Navegación y otros efectos ──────────────────────────────
     const irADetallePublicacion = (publicacion: Publicacion) => {
-        router.push(`/publicacion/${publicacion.id}`);
+        router.push(`/publicacion/${publicacion._id}`);
     };
-
 
     const cerrarPopUp = () => {
         setPublicacionSeleccionada(null);
@@ -166,14 +402,9 @@ const Publicaciones = () => {
     const indiceUltimaPublicacion = currentPage * publicacionesPorPagina;
     const indicePrimeraPublicacion = indiceUltimaPublicacion - publicacionesPorPagina;
 
-    // const publicacionesFiltradas = categoriaBusqueda
-    //     ? publicaciones.filter((pub) => pub.categoria === categoriaBusqueda)
-    //     : publicaciones;
-
     const publicacionesFiltradas = categoriaBusqueda
         ? publicaciones.filter(pub => pub.categoria === categoriaBusqueda && !pub.pausada)
         : publicaciones.filter(pub => !pub.pausada);
-
 
     const publicacionesActuales = publicacionesFiltradas.slice(indicePrimeraPublicacion, indiceUltimaPublicacion);
 
@@ -189,45 +420,23 @@ const Publicaciones = () => {
         }
     };
 
-
-
+    // Efectos para controlar el scroll cuando se muestra el pop-up o el formulario
     useEffect(() => {
-        if (mostrarPopUp) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'auto';
-        }
-
+        document.body.style.overflow = mostrarPopUp || mostrarFormulario ? 'hidden' : 'auto';
         return () => {
             document.body.style.overflow = 'auto';
         };
-    }, [mostrarPopUp]);
+    }, [mostrarPopUp, mostrarFormulario]);
 
-
-
-
-    useEffect(() => {
-        if (mostrarFormulario) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'auto';
-        }
-
-        return () => {
-            document.body.style.overflow = 'auto';
-        };
-    }, [mostrarFormulario]);
-
-
-    const togglePausarPublicacion = (id: number) => {
+    // ─── 6. (Opcional) Toggle para pausar/reanudar publicación ──────────────────────────────
+    const togglePausarPublicacion = (_id: string) => {
+        // Si deseas persistir el cambio en la base de datos, deberás crear un endpoint (PUT o PATCH)
         setPublicaciones(prevPublicaciones =>
             prevPublicaciones.map(pub =>
-                pub.id === id ? { ...pub, pausada: !pub.pausada } : pub
+                pub._id === _id ? { ...pub, pausada: !pub.pausada } : pub
             )
         );
     };
-
-
 
 
     return (
@@ -380,7 +589,7 @@ const Publicaciones = () => {
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
                             {publicacionesActuales.map((publicacion) => (
                                 <div
-                                    key={publicacion.id}
+                                    key={publicacion._id}
                                     className="border border-gray-300 p-2 rounded-lg shadow-sm cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
                                     onClick={() => irADetallePublicacion(publicacion)}
                                 >
@@ -399,7 +608,7 @@ const Publicaciones = () => {
                                                 e.stopPropagation();
                                                 const confirmDelete = window.confirm("¿Estás seguro que quieres eliminar? Perderás todo lo que la publicación conlleva.");
                                                 if (confirmDelete) {
-                                                    eliminarPublicacion(publicacion.id);
+                                                    eliminarPublicacion(publicacion._id);
                                                 }
                                             }}
                                             className="mt-1 text-[10px] text-red-500"
