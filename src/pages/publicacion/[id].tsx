@@ -142,25 +142,25 @@ const DetallePublicacion = () => {
 
 
 
-    // const togglePausarPublicacion = () => {
-    //     if (!publicacion) return;
+    const togglePausarPublicacion = () => {
+        if (!publicacion) return;
 
-    //     const publicacionesGuardadas = localStorage.getItem('publicaciones');
-    //     if (!publicacionesGuardadas) return;
+        const publicacionesGuardadas = localStorage.getItem('publicaciones');
+        if (!publicacionesGuardadas) return;
 
-    //     let publicaciones: Publicacion[] = JSON.parse(publicacionesGuardadas);
+        let publicaciones: Publicacion[] = JSON.parse(publicacionesGuardadas);
 
-    //     // Encontrar la publicación y actualizar su estado de pausada
-    //     publicaciones = publicaciones.map(pub =>
-    //         pub._id === publicacion._id ? { ...pub, pausada: !pub.pausada } : pub
-    //     );
+        // Encontrar la publicación y actualizar su estado de pausada
+        publicaciones = publicaciones.map(pub =>
+            pub._id === publicacion._id ? { ...pub, pausada: !pub.pausada } : pub
+        );
 
-    //     // Guardar los cambios en localStorage
-    //     localStorage.setItem('publicaciones', JSON.stringify(publicaciones));
+        // Guardar los cambios en localStorage
+        localStorage.setItem('publicaciones', JSON.stringify(publicaciones));
 
-    //     // Actualizar el estado en React para reflejar el cambio
-    //     setPublicacion((prev) => prev ? { ...prev, pausada: !prev.pausada } : null);
-    // };
+        // Actualizar el estado en React para reflejar el cambio
+        setPublicacion((prev) => prev ? { ...prev, pausada: !prev.pausada } : null);
+    };
 
 
 
@@ -481,7 +481,7 @@ const DetallePublicacion = () => {
                         </button>
                     )}
 
-                    {/* {session?.user?.id === publicacion.userId && (
+                    {session?.user?.id === publicacion.userId && (
                         <button
                             onClick={togglePausarPublicacion}
                             className="px-4 py-2 bg-[#35B88E] text-white rounded-lg hover:bg-[#2a9675] transition mt-10"
@@ -489,7 +489,7 @@ const DetallePublicacion = () => {
                         >
                             {publicacion.pausada ? 'Reanudar' : 'Marcar como prestado'}
                         </button>
-                    )} */}
+                    )}
 
 
 
