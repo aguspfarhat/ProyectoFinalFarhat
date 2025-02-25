@@ -94,7 +94,9 @@ const DetallePublicacion = () => {
         } else {
             // Calcular precio total al enviar
             const semanasUso = parseInt(formData.semanasUso, 10);
-            const finalPrice = semanasUso * parseFloat(publicacion.precio);
+            // const finalPrice = semanasUso * parseFloat(publicacion.precio);
+            const finalPrice = publicacion ? semanasUso * parseFloat(publicacion.precio) : 0;
+
 
             // Crear objeto con los datos a enviar
             const emailData = {
