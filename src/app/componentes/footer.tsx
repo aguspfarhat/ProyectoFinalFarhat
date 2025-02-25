@@ -21,12 +21,12 @@ const Footer = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link href="/" className="text-[#757575] font-semibold hover:text-[#35B88E] text-xs">
+                        <Link href="/Publicaciones" className="text-[#757575] font-semibold hover:text-[#35B88E] text-xs">
                             Publicaciones
                         </Link>
                     </li>
                     <li>
-                        <Link href="/" className="text-[#757575] font-semibold hover:text-[#35B88E] text-xs">
+                        <Link href="/Comunidad" className="text-[#757575] font-semibold hover:text-[#35B88E] text-xs">
                             Comunidad
                         </Link>
                     </li>
@@ -37,7 +37,7 @@ const Footer = () => {
                     <p className="text-[#757575] font-semibold text-xs">Terminos y condiciones</p>
                 </div>
                 <div className="flex justify-center">
-                    <p className="text-[#757575] font-semibold text-xs">@ 2024 Prestar</p>
+                    <p className="text-[#757575] font-semibold text-xs">@ 2025 Cuidar</p>
                 </div>
             </div>
             <br />
