@@ -14,11 +14,12 @@ export default async function handler(
 ) {
     await connectToDatabase();
 
-    const { method } = req;
+    const { method, query } = req;
 
     switch (method) {
         case 'GET':
             try {
+                const filter = query.userId ? { userId: query.userId } : {};
                 const publicaciones = await Publicacion.find({});
                 return res.status(200).json({ success: true, data: publicaciones });
             } catch (error: any) {

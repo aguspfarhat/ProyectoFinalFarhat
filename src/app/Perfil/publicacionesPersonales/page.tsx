@@ -2,6 +2,7 @@
 
 // import { useState, useEffect } from "react";
 // import { useSession } from "next-auth/react";
+// import { useRouter } from 'next/navigation';
 
 // // Interfaz para tipar las publicaciones
 // interface Publicacion {
@@ -13,6 +14,11 @@
 //     userId: string;
 //     pausada?: boolean;
 // }
+
+
+
+
+
 
 // const PublicacionesPersonales = () => {
 //     const { data: session } = useSession();
@@ -62,14 +68,13 @@
 //                         {publicacionesUsuario.map((pub) => (
 //                             <div
 //                                 key={pub.id}
-//                                 className={`border border-gray-300 p-4 rounded-lg shadow-md relative ${pub.pausada ? "opacity-50" : ""
-//                                     }`}
+//                                 // className="border border-gray-300 p-4 rounded-lg shadow-md relative"
+//                                 className="border border-gray-300 p-2 rounded-lg shadow-sm cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
 //                             >
 //                                 <img
-
 //                                     src={Array.isArray(pub.imagenes) && pub.imagenes.length > 0 ? pub.imagenes[0] : "/placeholder.jpg"}
 //                                     alt={pub.titulo}
-//                                     className="w-full h-48 object-cover rounded-md mb-4 min-h-[400px]"
+//                                     className={`w-full h-48 object-cover rounded-md mb-4 min-h-[400px] transition-opacity duration-300 ${pub.pausada ? "opacity-50" : ""}`}
 //                                 />
 //                                 {pub.pausada && (
 //                                     <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
@@ -80,8 +85,7 @@
 //                                 <p className="mt-1 text-[#757575]">{pub.descripcion}</p>
 //                                 <button
 //                                     onClick={() => togglePausarPublicacion(pub.id)}
-//                                     className={`mt-4 w-full py-2 rounded-md font-bold ${pub.pausada ? "bg-green-500 text-white" : "bg-red-500 text-white"
-//                                         }`}
+//                                     className={`mt-4 w-full py-2 rounded-md font-bold transition-all duration-300 ${pub.pausada ? "bg-[#35B88E] hover:bg-[#2a9675] text-white" : "bg-red-500 text-white"}`}
 //                                 >
 //                                     {pub.pausada ? "Reanudar" : "Marcar como prestado"}
 //                                 </button>
@@ -103,9 +107,9 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
 
-// Interfaz para tipar las publicaciones
+// Actualizamos la interfaz para que use _id en lugar de id
 interface Publicacion {
-    id: number;
+    _id: string;
     titulo: string;
     descripcion: string;
     imagenes: string[];
@@ -114,44 +118,40 @@ interface Publicacion {
     pausada?: boolean;
 }
 
-
-
-
-
-
 const PublicacionesPersonales = () => {
     const { data: session } = useSession();
     const [publicacionesUsuario, setPublicacionesUsuario] = useState<Publicacion[]>([]);
 
-    // Obtener las publicaciones desde el local storage
+    // Obtener las publicaciones desde la API (solo las del usuario en sesión)
     useEffect(() => {
         if (session?.user?.id) {
-            const publicacionesGuardadas = localStorage.getItem("publicaciones");
-            if (publicacionesGuardadas) {
+            const fetchPublicacionesUsuario = async () => {
                 try {
-                    const pubs: Publicacion[] = JSON.parse(publicacionesGuardadas);
-                    setPublicacionesUsuario(pubs.filter((pub) => pub.userId === session.user.id));
+                    const res = await fetch(`/api/publicaciones?userId=${session.user.id}`);
+                    if (!res.ok) {
+                        throw new Error("Error al obtener publicaciones");
+                    }
+                    const json = await res.json();
+                    if (json.success) {
+                        setPublicacionesUsuario(json.data);
+                    } else {
+                        console.error("Error en la respuesta de la API:", json.error);
+                    }
                 } catch (error) {
-                    console.error("Error al parsear publicaciones", error);
+                    console.error("Error al obtener publicaciones:", error);
                 }
-            }
+            };
+            fetchPublicacionesUsuario();
         }
     }, [session]);
 
-    // Función para cambiar el estado de pausada
-    const togglePausarPublicacion = (id: number) => {
-        const nuevasPublicaciones = publicacionesUsuario.map((pub) =>
-            pub.id === id ? { ...pub, pausada: !pub.pausada } : pub
+    // Función para cambiar el estado de pausada (nota: para persistir el cambio en la BD deberás crear un endpoint para actualizar la publicación)
+    const togglePausarPublicacion = (_id: string) => {
+        setPublicacionesUsuario((prevPublicaciones) =>
+            prevPublicaciones.map((pub) =>
+                pub._id === _id ? { ...pub, pausada: !pub.pausada } : pub
+            )
         );
-
-        setPublicacionesUsuario(nuevasPublicaciones);
-
-        // Actualizar en localStorage
-        const todasLasPublicaciones = JSON.parse(localStorage.getItem("publicaciones") || "[]");
-        const publicacionesActualizadas = todasLasPublicaciones.map((pub: Publicacion) =>
-            pub.id === id ? { ...pub, pausada: !pub.pausada } : pub
-        );
-        localStorage.setItem("publicaciones", JSON.stringify(publicacionesActualizadas));
     };
 
     return (
@@ -166,8 +166,7 @@ const PublicacionesPersonales = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
                         {publicacionesUsuario.map((pub) => (
                             <div
-                                key={pub.id}
-                                // className="border border-gray-300 p-4 rounded-lg shadow-md relative"
+                                key={pub._id}
                                 className="border border-gray-300 p-2 rounded-lg shadow-sm cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105"
                             >
                                 <img
@@ -183,7 +182,7 @@ const PublicacionesPersonales = () => {
                                 <h3 className="mt-2 text-xl font-bold text-[#757575]">{pub.titulo}</h3>
                                 <p className="mt-1 text-[#757575]">{pub.descripcion}</p>
                                 <button
-                                    onClick={() => togglePausarPublicacion(pub.id)}
+                                    onClick={() => togglePausarPublicacion(pub._id)}
                                     className={`mt-4 w-full py-2 rounded-md font-bold transition-all duration-300 ${pub.pausada ? "bg-[#35B88E] hover:bg-[#2a9675] text-white" : "bg-red-500 text-white"}`}
                                 >
                                     {pub.pausada ? "Reanudar" : "Marcar como prestado"}
