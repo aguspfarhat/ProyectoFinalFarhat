@@ -375,7 +375,7 @@ function SignupForm() {
         const name = formData.get("name") as string;
         const surname = formData.get("surname") as string;
         const email = formData.get("email") as string;
-        const username = formData.get("userName") as string;
+        const userName = formData.get("userName") as string;
         const password = formData.get("password") as string;
         const confirmPassword = formData.get("confirmPassword") as string;
 
@@ -390,7 +390,7 @@ function SignupForm() {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ name, surname, email, username, password }),
+                body: JSON.stringify({ name, surname, email, userName, password }),
             });
 
             const data = await response.json();

@@ -1,9 +1,11 @@
 "use server"
 
 
-import bcrypt from "bcrypt";
+// import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { dbConnect } from "../config/db"
 import Users from "../config/models/users";
+// import Users from "@/models/users";
 import { loginFormSchema, userFormSchema } from "./schemas";
 import { LoginState, UserState } from "./types";
 

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { MongoClient } from "mongodb";
 
 // Configuración de la conexión a MongoDB
@@ -9,6 +9,7 @@ const dbName = "Prestar";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
+        console.log("Body recibido:", req.body);
         const { name, surname, email, userName, password } = req.body;
 
         // Validar datos
