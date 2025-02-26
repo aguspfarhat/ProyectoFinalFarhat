@@ -39,9 +39,15 @@ export default function Signup() {
                         <h1 className="text-5xl lg:text-7xl font-bold text-[#35B88E]">comunidad!</h1>
                     </div>
 
-                    <div className="mt-10 w-full lg:mt-44 flex justify-center">
+
+
+                    <div className="w-full flex items-center justify-center min-h-screen lg:min-h-0 lg:relative lg:top-[-40px]">
                         <SignupForm />
                     </div>
+
+
+
+
 
                     <div className="hidden lg:block mt-20 lg:mt-44">
                         <Image
@@ -59,11 +65,11 @@ export default function Signup() {
             {/* DIV GRID GRID-COL-3*/}
             <div className='w-full flex justify-center'>
 
-                <div className="flex justify-center mt-20 text-center" > {/* COL-START-2 */}
+                <div className="flex justify-center mt-5 text-center" > {/* COL-START-2 */}
                     <div>
                         <h1 className="text-2xl font-bold text-[#757575]">¿Ya tenes una cuenta?</h1>
                         <Link href="/Login">
-                            <h1 className="text-2xl font-bold text-[#35B88E] hover:text-green-600">¡Inicia sesión!</h1>
+                            <h1 className="text-2xl font-bold text-[#35B88E] hover:text-[#2a9675]">¡Inicia sesión!</h1>
                         </Link>
                     </div>
                 </div>

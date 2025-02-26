@@ -628,17 +628,17 @@ const Publicaciones = () => {
                         <div className="flex justify-center mt-28">
                             <button
                                 onClick={paginaAnterior}
-                                className={`px-4 py-2 mx-1 rounded-md ${currentPage === 1 ? 'bg-gray-300' : 'bg-[#35B88E] text-white'}`}
+                                className={`px-4 py-2 mx-1 rounded-md cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 ${currentPage === 1 ? 'bg-gray-300' : 'bg-[#35B88E] text-white'}`}
                                 disabled={currentPage === 1}
                             >
-                                Anterior
+                                &#8592;
                             </button>
                             <button
                                 onClick={siguientePagina}
-                                className={`px-4 py-2 mx-1 rounded-md ${currentPage === totalPaginas ? 'bg-gray-300' : 'bg-[#35B88E] text-white'}`}
+                                className={`px-4 py-2 mx-1 rounded-md cursor-pointer transform transition-transform duration-300 ease-in-out hover:scale-105 ${currentPage === totalPaginas ? 'bg-gray-300' : 'bg-[#35B88E] text-white'}`}
                                 disabled={currentPage === totalPaginas}
                             >
-                                Siguiente
+                                &#8594;
                             </button>
                         </div>
                         {/* Fin del paginado */}

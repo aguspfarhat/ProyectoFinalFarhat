@@ -114,7 +114,7 @@ export default function Login() {
                         <h1 className="text-2xl font-bold text-[#757575]">¿Todavía no tenes una cuenta?</h1>
                         <h1 className="text-2xl font-bold text-[#757575]">
                             <Link href="/Signup">
-                                <span className="text-[#35B88E] hover:text-green-600">¡Clickea acá!</span>
+                                <span className="text-[#35B88E] hover:text-[#2a9675]">¡Clickea acá!</span>
                             </Link>
                         </h1>
                     </div>
