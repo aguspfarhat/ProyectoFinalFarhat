@@ -472,7 +472,7 @@ const Publicaciones = () => {
                     <button
                         onClick={() => {
                             if (!user) {
-                                alert('Necesitas estar logueado para publicar.');
+                                alert('Necesitas iniciar sesion para poder publicar');
                             } else {
                                 setMostrarFormulario(true);
                             }
@@ -500,6 +500,12 @@ const Publicaciones = () => {
                             onChange={(e) => setTitulo(e.target.value)}
                             className="w-full p-2 border border-gray-300 rounded text-gray-700 mb-4"
                             placeholder="Ingrese el título"
+                            maxLength={62} // Limita a 62 caracteres
+                            style={{
+                                whiteSpace: 'normal', // Permite el salto de línea
+                                overflowWrap: 'break-word', // Salta la palabra si es demasiado larga
+                                lineHeight: '1.2em' // Controla la altura de las líneas
+                            }}
                         />
 
                         <label className="block text-lg font-semibold mb-2 text-[#757575]">Descripción</label>
@@ -508,6 +514,8 @@ const Publicaciones = () => {
                             onChange={(e) => setDescripcion(e.target.value)}
                             className="w-full p-2 border border-gray-300 rounded text-gray-700 mb-4"
                             placeholder="Ingrese una descripción"
+                            maxLength={100}  // Limita a 31 caracteres
+
                         />
 
                         <label className="block text-lg font-semibold mb-2 text-[#757575]">Imágenes (máximo 7)</label>
@@ -555,12 +563,18 @@ const Publicaciones = () => {
                             <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-[#757575]">$
                             </span>
                             <input
-                                type="number"
+                                type="text"  // Aún es tipo texto para controlar la longitud
                                 value={precio}
-                                onChange={(e) => setPrecio(e.target.value)}
+                                onChange={(e) => {
+                                    // Solo permite ingresar números y limita a 7 caracteres
+                                    const newValue = e.target.value;
+                                    if (/^\d{0,7}$/.test(newValue)) {
+                                        setPrecio(newValue);
+                                    }
+                                }}
                                 className="w-full p-2 pl-6 border border-gray-300 rounded text-[#757575]"
-                                min="0"
                                 onKeyDown={(e) => {
+                                    // Previene la entrada de caracteres no numéricos
                                     if (e.key === '-' || e.key === 'e') e.preventDefault();
                                 }}
                             />
@@ -599,8 +613,17 @@ const Publicaciones = () => {
                                         alt={publicacion.titulo}
                                         className="w-full h-32 object-cover rounded-md mb-2"
                                     />
-                                    <h3 className="text-sm font-semibold text-[#757575]">{publicacion.titulo}</h3>
-                                    <p className="mt-1 text-xs text-[#757575]">{publicacion.descripcion}</p>
+                                    {/* <h3 className="text-sm font-semibold text-[#757575]">{publicacion.titulo}</h3> */}
+                                    <h3 className="text-sm font-semibold text-[#757575] break-words" style={{
+                                        whiteSpace: 'normal',
+                                        overflowWrap: 'break-word',
+                                        wordBreak: 'break-word'
+                                    }}>
+                                        {publicacion.titulo.slice(0, 31)}<br />
+                                        {publicacion.titulo.length > 31 && publicacion.titulo.slice(31, 62)}
+                                    </h3>
+
+                                    {/* <p className="mt-1 text-xs text-[#757575]">{publicacion.descripcion}</p> */}
                                     <p className="mt-1 text-[10px] text-gray-500">Categoría: {publicacion.categoria}</p>
                                     {publicacion.userId === user?.id && (
                                         <button

@@ -20,6 +20,14 @@ function SignupForm() {
         const password = formData.get("password") as string;
         const confirmPassword = formData.get("confirmPassword") as string;
 
+
+        if (password.length < 8) {
+            setErrorMessage("La contraseña debe tener al menos 8 caracteres.");
+            return;
+        }
+
+
+
         if (password !== confirmPassword) {
             setErrorMessage("Las contraseñas no coinciden.");
             return;

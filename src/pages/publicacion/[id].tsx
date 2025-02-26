@@ -409,35 +409,8 @@ const DetallePublicacion = () => {
                 )}
                 <button onClick={() => router.back()} className="text-[#757575] mb-4 hover:text-[#35B88E]">← Volver</button>
 
+
                 {/* <div className="text-center">
-                    <div className="flex flex-wrap justify-center gap-4 mt-4">
-                        <div className="text-center">
-                            {publicacion.imagenes.length > 1 ? (
-                                <Swiper
-                                    modules={[Navigation]}
-                                    navigation
-                                    className="w-full max-w-3xl mx-auto mt-4 rounded-lg"
-                                >
-                                    {publicacion.imagenes.map((img, index) => (
-                                        <SwiperSlide key={index}>
-                                            <img src={img} alt={`Imagen ${index + 1}`} className="w-full h-[700px] object-cover rounded-lg" />
-                                        </SwiperSlide>
-                                    ))}
-                                </Swiper>
-                            ) : (
-                                <img src={publicacion.imagenes[0]} alt={publicacion.titulo} className="w-full max-w-3xl mx-auto mt-4 rounded-lg" />
-                            )}
-                            <style>
-                                {`
-                                    .swiper-button-next, .swiper-button-prev {
-                                        color: #35B88E !important;
-                                    }
-                                `}
-                            </style>
-                        </div>
-                    </div>
-                </div> */}
-                <div className="text-center">
                     <div className="flex flex-wrap justify-center gap-4 mt-4">
                         <div className="text-center">
                             {publicacion.imagenes.length > 1 ? (
@@ -476,27 +449,76 @@ const DetallePublicacion = () => {
                             </style>
                         </div>
                     </div>
+                </div> */}
+
+
+                <div className="text-center">
+                    <div className="flex flex-wrap justify-center gap-4 mt-4">
+                        <div className="text-center">
+                            {publicacion.imagenes.length > 1 ? (
+                                <Swiper
+                                    modules={[Navigation]}
+                                    navigation
+                                    className="w-full max-w-3xl mx-auto mt-4 rounded-lg"
+                                >
+                                    {publicacion.imagenes.map((img, index) => (
+                                        <SwiperSlide key={index}>
+                                            <div className="w-full h-[500px] flex justify-center items-center">
+                                                <img
+                                                    src={img}
+                                                    alt={`Imagen ${index + 1}`}
+                                                    className="object-cover w-full h-full rounded-lg"
+                                                    style={{ objectFit: 'cover' }}
+                                                />
+                                            </div>
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
+                            ) : (
+                                <div className="w-full max-w-3xl mx-auto mt-4 rounded-lg h-[500px] flex justify-center items-center">
+                                    <img
+                                        src={publicacion.imagenes[0]}
+                                        alt={publicacion.titulo}
+                                        className="object-cover w-full h-full rounded-lg"
+                                        style={{ objectFit: 'cover' }}
+                                    />
+                                </div>
+                            )}
+                            <style>
+                                {`
+                    .swiper-button-next, .swiper-button-prev {
+                        color: #35B88E !important;
+                    }
+                `}
+                            </style>
+                        </div>
+                    </div>
                 </div>
 
 
 
 
 
-
-
                 {/* titulo, descripcion, categoria, precio y boton alquilar */}
-
                 <div className="flex flex-col lg:ml-96 ml-4 px-4 lg:px-0">
                     <div className="mt-10">
-                        <h1 className="text-3xl font-bold text-[#757575]">{publicacion.titulo}</h1>
+                        <h1 className="text-3xl font-bold text-[#757575]">
+                            {publicacion.titulo.length > 41
+                                ? <>{publicacion.titulo.substring(0, 41)}<br />{publicacion.titulo.substring(41)}</>
+                                : publicacion.titulo}
+                        </h1>
                     </div>
+
 
                     <hr className="mt-10 mx-auto lg:mx-0" style={{ width: '20%', borderTop: '0.5px solid #757575' }} />
 
                     <div className="mt-10">
                         <h1 className="text-2xl font-semibold text-[#757575]">Descripcion:</h1>
-                        <p className="text-lg text-[#757575]">{publicacion.descripcion}</p>
+                        <p className="text-lg text-[#757575]" style={{ whiteSpace: 'pre-line' }}>
+                            {publicacion.descripcion.length > 64 ? `${publicacion.descripcion.substring(0, 64)}\n${publicacion.descripcion.substring(64)}` : publicacion.descripcion}
+                        </p>
                     </div>
+
 
                     <hr className="mt-10 mx-auto lg:mx-0" style={{ width: '20%', borderTop: '1px solid #757575' }} />
 
@@ -516,7 +538,7 @@ const DetallePublicacion = () => {
                         <button
                             onClick={() => {
                                 if (!user) {
-                                    alert('Necesitas estar logueado para alquilar.');
+                                    alert('Necesitas iniciar sesion para poder alquilar');
                                 } else {
                                     setAlquilarPopUp(true);
                                 }
@@ -541,7 +563,7 @@ const DetallePublicacion = () => {
                         onClick={() => setAlquilarPopUp(false)}
                     >
                         <form
-                            className="bg-white p-6 rounded-lg shadow-lg w-11/12 sm:w-2/3 lg:w-3/4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+                            className="bg-white rounded-lg shadow-lg w-11/12 sm:w-2/3 lg:w-3/4 p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-h-[95vh] overflow-y-auto"
                             onClick={(e) => e.stopPropagation()}
                             onSubmit={handleSubmit}
                         >
@@ -554,7 +576,6 @@ const DetallePublicacion = () => {
                                     className={`w-full p-2 border ${errors.nombre ? 'border-red-500' : 'border-gray-300'} rounded text-gray-700`}
                                     placeholder="Ingrese su nombre"
                                     value={formData.nombre}
-
                                     onChange={handleChange}
                                 />
                                 {errors.nombre && <p className="text-red-500 text-sm">{errors.nombre}</p>}
@@ -609,18 +630,18 @@ const DetallePublicacion = () => {
                                     })}
                                 </select>
                                 {errors.semanasUso && <p className="text-red-500 text-sm">{errors.semanasUso}</p>}
+                            </div>
 
-
-
-
-                                {/* Departamento */}
+                            {/* Departamento */}
+                            <div className="col-span-1 sm:col-span-2 md:col-span-3">
                                 <label className="block text-lg font-semibold text-[#757575] mt-3">Departamento de Tucumán</label>
-                                <select className="w-full p-2 border border-gray-300 rounded text-gray-700"
+                                <select
+                                    className="w-full p-2 border border-gray-300 rounded text-gray-700"
                                     name="departamento"
                                     value={formData.departamento}
                                     onChange={handleChange}
                                 >
-                                    <option value="">En que departamento se encuentra</option>
+                                    <option value="">En qué departamento se encuentra</option>
                                     <option value="Burruyacú">Burruyacú</option>
                                     <option value="Capital">Capital (San Miguel)</option>
                                     <option value="Chicligasta">Chicligasta</option>
@@ -649,7 +670,7 @@ const DetallePublicacion = () => {
                                     type="text"
                                     name="direccion"
                                     className={`w-full p-2 border ${errors.direccion ? 'border-red-500' : 'border-gray-300'} rounded text-gray-700`}
-                                    placeholder="Ingrese su direccion"
+                                    placeholder="Ingrese su dirección"
                                     value={formData.direccion}
                                     onChange={handleChange}
                                 />
@@ -677,7 +698,7 @@ const DetallePublicacion = () => {
                                     type="text"
                                     name="depto"
                                     className={`w-full p-2 border ${errors.depto ? 'border-red-500' : 'border-gray-300'} rounded text-gray-700`}
-                                    placeholder="Ingrese el numero de departamento"
+                                    placeholder="Ingrese el número de departamento"
                                     value={formData.depto}
                                     onChange={handleChange}
                                 />
@@ -691,7 +712,7 @@ const DetallePublicacion = () => {
                                     type="tel"
                                     name="telefono"
                                     className={`w-full p-2 border ${errors.telefono ? 'border-red-500' : 'border-gray-300'} rounded text-gray-700`}
-                                    placeholder="Ingrese su numero de telefono"
+                                    placeholder="Ingrese su número de teléfono"
                                     value={formData.telefono}
                                     onChange={handleChange}
                                 />
@@ -701,7 +722,8 @@ const DetallePublicacion = () => {
                             {/* Tipo de documento */}
                             <div>
                                 <label className="block text-lg font-semibold text-[#757575]">Tipo de Documento</label>
-                                <select className="w-full p-2 border border-gray-300 rounded text-gray-700"
+                                <select
+                                    className="w-full p-2 border border-gray-300 rounded text-gray-700"
                                     name="tipoDocumento"
                                     value={formData.tipoDocumento}
                                     onChange={handleChange}
@@ -725,15 +747,17 @@ const DetallePublicacion = () => {
                                     type="number"
                                     name="numeroDocumento"
                                     className={`w-full p-2 border ${errors.numeroDocumento ? 'border-red-500' : 'border-gray-300'} rounded text-gray-700`}
-                                    placeholder="Ingrese su numero de documento"
+                                    placeholder="Ingrese su número de documento"
                                     value={formData.numeroDocumento}
                                     onChange={handleChange}
                                 />
                                 {errors.numeroDocumento && <p className="text-red-500 text-sm">{errors.numeroDocumento}</p>}
                             </div>
 
-                            <div className="text-[#757575] flex items-center">
-                                <p><span className="text-red-500">* </span>Estos datos del formulario serán enviados al dueño de la publicación vía mail, para confirmar el alquiler.</p>
+                            <div className="text-[#757575] flex items-center col-span-1 sm:col-span-2 md:col-span-3">
+                                <p>
+                                    <span className="text-red-500">*</span> Estos datos del formulario serán enviados al dueño de la publicación vía mail, para confirmar el alquiler.
+                                </p>
                             </div>
 
                             {/* Botón de enviar */}
@@ -745,6 +769,7 @@ const DetallePublicacion = () => {
                         </form>
                     </div>
                 )}
+
 
 
 
