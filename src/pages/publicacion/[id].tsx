@@ -432,7 +432,7 @@ const DetallePublicacion = () => {
 
 
 
-                <div className="text-center">
+                {/* <div className="text-center">
                     <div className="flex flex-wrap justify-center gap-4 mt-4">
                         <div className="text-center">
                             {publicacion.imagenes.length > 1 ? (
@@ -471,7 +471,51 @@ const DetallePublicacion = () => {
                             </style>
                         </div>
                     </div>
+                </div> */}
+
+
+
+                <div className="text-center">
+                    <div className="flex flex-wrap justify-center items-center gap-4 mt-4">
+                        <div className="text-center">
+                            {publicacion.imagenes.length > 1 ? (
+                                <Swiper
+                                    modules={[Navigation]}
+                                    navigation
+                                    className="w-full max-w-xs lg:max-w-md mx-auto mt-4 rounded-lg"
+                                >
+                                    {publicacion.imagenes.map((img, index) => (
+                                        <SwiperSlide key={index}>
+                                            <div className="w-full max-w-xs lg:max-w-md aspect-[4/3] flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden">
+                                                <img
+                                                    src={img}
+                                                    alt={`Imagen ${index + 1}`}
+                                                    className="w-full h-full object-contain"
+                                                />
+                                            </div>
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
+                            ) : (
+                                <div className="w-full max-w-xs lg:max-w-md aspect-[4/3] flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden mx-auto mt-4">
+                                    <img
+                                        src={publicacion.imagenes[0]}
+                                        alt={publicacion.titulo}
+                                        className="w-full h-full object-contain"
+                                    />
+                                </div>
+                            )}
+                            <style>
+                                {`
+          .swiper-button-next, .swiper-button-prev {
+              color: #35B88E !important;
+          }
+        `}
+                            </style>
+                        </div>
+                    </div>
                 </div>
+
 
 
 
@@ -480,40 +524,6 @@ const DetallePublicacion = () => {
 
                 {/* titulo, descripcion, categoria, precio y boton alquilar */}
                 <div className="flex flex-col lg:ml-96 ml-4 px-4 lg:px-0">
-
-                    {/* <div className="mt-10">
-                        <h1 className="text-3xl font-bold text-[#757575]">
-                            <span className="hidden lg:inline">
-                                {publicacion.titulo.length > 41
-                                    ? <>{publicacion.titulo.substring(0, 41)}<br />{publicacion.titulo.substring(41)}</>
-                                    : publicacion.titulo}
-                            </span>
-                            <span className="inline lg:hidden">
-                                {publicacion.titulo.length > 17
-                                    ? <>{publicacion.titulo.substring(0, 17)}<br />{publicacion.titulo.substring(17)}</>
-                                    : publicacion.titulo}
-                            </span>
-                        </h1>
-                    </div>
-
-                    <hr className="mt-10 mx-auto lg:mx-0" style={{ width: '20%', borderTop: '0.5px solid #757575' }} />
-
-                    <div className="mt-10">
-                        <h1 className="text-2xl font-semibold text-[#757575]">Descripción:</h1>
-                        <p className="text-lg text-[#757575]" style={{ whiteSpace: 'pre-line' }}>
-                            <span className="hidden lg:inline">
-                                {publicacion.descripcion.length > 64
-                                    ? `${publicacion.descripcion.substring(0, 64)}\n${publicacion.descripcion.substring(64)}`
-                                    : publicacion.descripcion}
-                            </span>
-                            <span className="inline lg:hidden">
-                                {publicacion.descripcion.length > 38
-                                    ? `${publicacion.descripcion.substring(0, 38)}\n${publicacion.descripcion.substring(38)}`
-                                    : publicacion.descripcion}
-                            </span>
-                        </p>
-                    </div> */}
-
                     <div className="mt-10">
                         <h1 className="text-3xl font-bold text-[#757575]">
                             {/* Versión para pantallas grandes: límite de 41 caracteres para el título */}

@@ -113,9 +113,9 @@ const Navbar = () => {
                     )}
 
                     {/* Enlaces de navegación */}
-                    <Link href="/" className="py-2 text-gray-800 font-semibold hover:text-[#35B88E]" onClick={() => setIsMenuOpen(false)}>Inicio</Link>
-                    <Link href="/Publicaciones" className="py-2 text-gray-800 font-semibold hover:text-[#35B88E]" onClick={() => setIsMenuOpen(false)}>Publicaciones</Link>
-                    <Link href="/Comunidad" className="py-2 text-gray-800 font-semibold hover:text-[#35B88E]" onClick={() => setIsMenuOpen(false)}>Comunidad</Link>
+                    <Link href="/" className="py-2 text-[#757575] font-semibold hover:text-[#35B88E]" onClick={() => setIsMenuOpen(false)}>Inicio</Link>
+                    <Link href="/Publicaciones" className="py-2 text-[#757575] font-semibold hover:text-[#35B88E]" onClick={() => setIsMenuOpen(false)}>Publicaciones</Link>
+                    <Link href="/Comunidad" className="py-2 text-[#757575] font-semibold hover:text-[#35B88E]" onClick={() => setIsMenuOpen(false)}>Comunidad</Link>
 
                     {/* Botones de sesión o perfil en el menú */}
                     {session ? (
