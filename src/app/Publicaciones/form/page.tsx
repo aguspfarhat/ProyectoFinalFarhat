@@ -461,6 +461,11 @@ const Publicaciones = () => {
                         <option value="Brazo">Brazo</option>
                         <option value="Mano">Mano</option>
                         <option value="Muñeca">Muñeca</option>
+                        <option value="Cabeza y cuello">Cabeza y cuello</option>
+                        <option value="Hombro y clavicula">Hombro y clavicula</option>
+                        <option value="Codo">Codo</option>
+                        <option value="Espalda y columna">Espalda y columna</option>
+                        <option value="Cadera">Cadera</option>
                     </select>
                 </div>
 
@@ -556,6 +561,11 @@ const Publicaciones = () => {
                             <option value="Brazo">Brazo</option>
                             <option value="Mano">Mano</option>
                             <option value="Muñeca">Muñeca</option>
+                            <option value="Cabeza y cuello">Cabeza y cuello</option>
+                            <option value="Hombro y clavicula">Hombro y clavicula</option>
+                            <option value="Codo">Codo</option>
+                            <option value="Espalda y columna">Espalda y columna</option>
+                            <option value="Cadera">Cadera</option>
                         </select>
 
                         <label className="block text-lg font-semibold mb-2 text-[#757575] mt-2">Precio del alquiler por semana</label>

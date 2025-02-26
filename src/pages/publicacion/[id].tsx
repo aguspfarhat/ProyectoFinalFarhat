@@ -266,37 +266,6 @@ const DetallePublicacion = () => {
 
 
 
-
-    // useEffect(() => {
-    //     if (!id) return;
-
-    //     const publicacionesGuardadas = localStorage.getItem('publicaciones');
-    //     if (publicacionesGuardadas) {
-    //         const publicaciones: Publicacion[] = JSON.parse(publicacionesGuardadas);
-    //         const encontrada = publicaciones.find(pub => pub.id === Number(id));
-    //         if (encontrada) {
-    //             setPublicacion(encontrada);
-    //         }
-    //     }
-
-    //     const fetchMensajes = async () => {
-    //         try {
-    //             const res = await fetch(`/api/mensajes?publicacionId=${String(id)}`);
-    //             if (!res.ok) throw new Error("Error al obtener mensajes");
-    //             const data = await res.json();
-
-    //             console.log("Mensajes cargados:", data);
-
-    //             setMensajes(data);
-    //         } catch (error) {
-    //             console.error(error);
-    //         }
-    //     };
-
-    //     fetchMensajes();
-    // }, [id]);
-
-
     useEffect(() => {
         if (!id) return;
 
@@ -457,6 +426,7 @@ const DetallePublicacion = () => {
                 </div> */}
 
 
+
                 <div className="text-center">
                     <div className="flex flex-wrap justify-center gap-4 mt-4">
                         <div className="text-center">
@@ -464,27 +434,26 @@ const DetallePublicacion = () => {
                                 <Swiper
                                     modules={[Navigation]}
                                     navigation
-                                    className="w-full max-w-3xl mx-auto mt-4 rounded-lg"
+                                    className="w-full max-w-md mx-auto mt-4 rounded-lg"
                                 >
                                     {publicacion.imagenes.map((img, index) => (
                                         <SwiperSlide key={index}>
-                                            {/* Contenedor con flexbox para centrar la imagen */}
-                                            <div className="w-full max-w-[400px] h-[400px] flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden mx-auto">
+                                            <div className="w-full max-w-md aspect-[4/3] flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden">
                                                 <img
                                                     src={img}
                                                     alt={`Imagen ${index + 1}`}
-                                                    className="max-w-full max-h-full object-contain"
+                                                    className="w-full h-full object-contain"
                                                 />
                                             </div>
                                         </SwiperSlide>
                                     ))}
                                 </Swiper>
                             ) : (
-                                <div className="w-full max-w-[400px] h-[400px] flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden mx-auto">
+                                <div className="w-full max-w-md aspect-[4/3] flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden">
                                     <img
                                         src={publicacion.imagenes[0]}
                                         alt={publicacion.titulo}
-                                        className="max-w-full max-h-full object-contain"
+                                        className="w-full h-full object-contain"
                                     />
                                 </div>
                             )}
@@ -498,6 +467,7 @@ const DetallePublicacion = () => {
                         </div>
                     </div>
                 </div>
+
 
 
 
