@@ -1,232 +1,3 @@
-// 'use client';
-
-// import { useState, useEffect } from 'react';
-// import { useSession } from "next-auth/react";
-// import { useRouter } from 'next/navigation';
-
-
-
-
-// interface Publicacion {
-//     id: number;
-//     titulo: string;
-//     descripcion: string;
-//     imagenes: string[];
-//     categoria: string;
-//     userId: string; // Añadido para identificar al autor
-//     precio: string;
-//     pausada?: boolean;
-// }
-
-// const Publicaciones = () => {
-//     const [mostrarFormulario, setMostrarFormulario] = useState(false);
-//     const [titulo, setTitulo] = useState('');
-//     const [descripcion, setDescripcion] = useState('');
-//     const [imagenes, setImagenes] = useState<File[]>([]);
-//     const [categoria, setCategoria] = useState('');
-//     const [precio, setPrecio] = useState('');
-//     const [publicaciones, setPublicaciones] = useState<Publicacion[]>([]);
-//     const [publicacionSeleccionada, setPublicacionSeleccionada] = useState<Publicacion | null>(null);
-//     const [mostrarPopUp, setMostrarPopUp] = useState(false);
-//     const [categoriaBusqueda, setCategoriaBusqueda] = useState('');
-//     const [currentPage, setCurrentPage] = useState(1);
-//     const publicacionesPorPagina = 18;
-//     const { data: session } = useSession();
-//     const user = session?.user ? { id: session.user.id } : null;
-
-
-
-//     useEffect(() => {
-//         const publicacionesGuardadas = localStorage.getItem('publicaciones');
-//         if (publicacionesGuardadas) {
-//             try {
-//                 setPublicaciones(JSON.parse(publicacionesGuardadas));
-//             } catch (error) {
-//                 console.error("Error al parsear publicaciones guardadas: ", error);
-//             }
-//         }
-//     }, []);
-
-//     useEffect(() => {
-//         if (publicaciones.length > 0) {
-//             localStorage.setItem('publicaciones', JSON.stringify(publicaciones));
-//         }
-//     }, [publicaciones]);
-
-//     const handleSubmit = (e: React.FormEvent) => {
-//         e.preventDefault();
-
-//         if (!titulo || !descripcion || imagenes.length === 0 || !categoria) {
-//             alert('Por favor completa todos los campos.');
-//             return;
-//         }
-
-//         if (!user) {
-//             alert('Necesitas estar logueado para publicar.');
-//             return;
-//         }
-
-//         const leerImagenes = async () => {
-//             const imagenesBase64: string[] = await Promise.all(
-//                 imagenes.map((imagen) => {
-//                     return new Promise<string>((resolve) => {
-//                         const reader = new FileReader();
-//                         reader.onloadend = () => resolve(reader.result as string);
-//                         reader.readAsDataURL(imagen);
-//                     });
-//                 })
-//             );
-
-//             const nuevaPublicacion: Publicacion = {
-//                 id: Date.now(),
-//                 titulo,
-//                 descripcion,
-//                 imagenes: imagenesBase64,
-//                 categoria,
-//                 userId: user.id,
-//                 precio,
-//             };
-
-//             setPublicaciones([nuevaPublicacion, ...publicaciones]);
-//             setTitulo('');
-//             setDescripcion('');
-//             setImagenes([]);
-//             setCategoria('');
-//             setMostrarFormulario(false);
-//             setPrecio('');
-//         };
-
-//         leerImagenes();
-//     };
-
-
-//     const eliminarPublicacion = (id: number) => {
-//         const publicacionAEliminar = publicaciones.find(pub => pub.id === id);
-//         if (publicacionAEliminar && publicacionAEliminar.userId === user?.id) {
-//             setPublicaciones(publicaciones.filter(pub => pub.id !== id));
-//         } else {
-//             alert('No puedes eliminar esta publicación.');
-//         }
-//     };
-
-
-
-//     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//         if (e.target.files) {
-//             const nuevasImagenes = Array.from(e.target.files);
-//             if (imagenes.length + nuevasImagenes.length > 7) {
-//                 alert('Solo puedes subir hasta 7 imágenes.');
-//                 return;
-//             }
-//             setImagenes([...imagenes, ...nuevasImagenes]);
-//         }
-//     };
-
-//     const eliminarImagen = (index: number) => {
-//         setImagenes(imagenes.filter((_, i) => i !== index));
-//     };
-
-
-
-
-//     useEffect(() => {
-//         const publicacionesGuardadas = localStorage.getItem('publicaciones');
-//         if (publicacionesGuardadas) {
-//             try {
-//                 setPublicaciones(JSON.parse(publicacionesGuardadas));
-//             } catch (error) {
-//                 console.error("Error al parsear publicaciones guardadas: ", error);
-//             }
-//         }
-//     }, []);
-
-//     useEffect(() => {
-//         if (publicaciones.length > 0) {
-//             localStorage.setItem('publicaciones', JSON.stringify(publicaciones));
-//         }
-//     }, [publicaciones]);
-
-
-
-
-
-//     const router = useRouter();
-
-//     const irADetallePublicacion = (publicacion: Publicacion) => {
-//         router.push(`/publicacion/${publicacion.id}`);
-//     };
-
-
-//     const cerrarPopUp = () => {
-//         setPublicacionSeleccionada(null);
-//         setMostrarPopUp(false);
-//     };
-
-//     const totalPaginas = Math.ceil(publicaciones.length / publicacionesPorPagina);
-//     const indiceUltimaPublicacion = currentPage * publicacionesPorPagina;
-//     const indicePrimeraPublicacion = indiceUltimaPublicacion - publicacionesPorPagina;
-
-//     // const publicacionesFiltradas = categoriaBusqueda
-//     //     ? publicaciones.filter((pub) => pub.categoria === categoriaBusqueda)
-//     //     : publicaciones;
-
-//     const publicacionesFiltradas = categoriaBusqueda
-//         ? publicaciones.filter(pub => pub.categoria === categoriaBusqueda && !pub.pausada)
-//         : publicaciones.filter(pub => !pub.pausada);
-
-
-//     const publicacionesActuales = publicacionesFiltradas.slice(indicePrimeraPublicacion, indiceUltimaPublicacion);
-
-//     const siguientePagina = () => {
-//         if (currentPage < totalPaginas) {
-//             setCurrentPage(prev => prev + 1);
-//         }
-//     };
-
-//     const paginaAnterior = () => {
-//         if (currentPage > 1) {
-//             setCurrentPage(prev => prev - 1);
-//         }
-//     };
-
-
-
-//     useEffect(() => {
-//         if (mostrarPopUp) {
-//             document.body.style.overflow = 'hidden';
-//         } else {
-//             document.body.style.overflow = 'auto';
-//         }
-
-//         return () => {
-//             document.body.style.overflow = 'auto';
-//         };
-//     }, [mostrarPopUp]);
-
-
-
-
-//     useEffect(() => {
-//         if (mostrarFormulario) {
-//             document.body.style.overflow = 'hidden';
-//         } else {
-//             document.body.style.overflow = 'auto';
-//         }
-
-//         return () => {
-//             document.body.style.overflow = 'auto';
-//         };
-//     }, [mostrarFormulario]);
-
-
-//     const togglePausarPublicacion = (id: number) => {
-//         setPublicaciones(prevPublicaciones =>
-//             prevPublicaciones.map(pub =>
-//                 pub.id === id ? { ...pub, pausada: !pub.pausada } : pub
-//             )
-//         );
-//     };
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -291,7 +62,7 @@ const Publicaciones = () => {
         }
 
         if (!user) {
-            alert('Necesitas estar logueado para publicar.');
+            alert('Necesitas iniciar sesión para publicar.');
             return;
         }
 
@@ -498,6 +269,17 @@ const Publicaciones = () => {
                     <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-lg w-11/12 sm:w-2/3 lg:w-1/3"
                         onClick={(e) => e.stopPropagation()}
                     >
+
+                        {/* Botón de Cerrar */}
+                        <button
+                            type="button"
+                            className="absolute top-3 right-3 bg-gray-200 hover:bg-gray-300 text-gray-600 rounded-full p-2 focus:outline-none"
+                            onClick={() => setMostrarFormulario(false)}
+                        >
+                            ✖
+                        </button>
+
+
                         <label className="block text-lg font-semibold mb-2 text-[#757575]">Título</label>
                         <input
                             type="text"
@@ -635,7 +417,7 @@ const Publicaciones = () => {
 
                                     {/* <p className="mt-1 text-xs text-[#757575]">{publicacion.descripcion}</p> */}
                                     <p className="mt-1 text-[10px] text-gray-500">Categoría: {publicacion.categoria}</p>
-                                    {publicacion.userId === user?.id && (
+                                    {/* {publicacion.userId === user?.id && (
                                         <button
                                             onClick={(e) => {
                                                 e.stopPropagation();
@@ -648,7 +430,19 @@ const Publicaciones = () => {
                                         >
                                             Eliminar
                                         </button>
+                                    )} */}
+                                    {publicacion.userId === user?.id && (
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                eliminarPublicacion(publicacion._id); // Se llama directamente sin window.confirm
+                                            }}
+                                            className="mt-1 text-[10px] text-red-500"
+                                        >
+                                            Eliminar
+                                        </button>
                                     )}
+
                                 </div>
                             ))}
                         </div>

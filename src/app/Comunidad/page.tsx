@@ -99,6 +99,15 @@ const Comunidad = () => {
                     className="fixed inset-0 bg-gray-500 bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
                     onClick={closePopup} // Cerrar el popup al hacer clic fuera
                 >
+                    {/* Botón de Cerrar */}
+                    <button
+                        type="button"
+                        className="absolute top-3 right-3 bg-gray-200 hover:bg-gray-300 text-gray-600 rounded-full p-2 focus:outline-none"
+                        onClick={closePopup}
+                    >
+                        ✖
+                    </button>
+
                     <div
                         className="bg-white p-6 rounded-md shadow-lg w-96"
                         onClick={(e) => e.stopPropagation()} // Evitar que el clic dentro del popup cierre el popup

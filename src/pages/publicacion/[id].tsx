@@ -475,7 +475,7 @@ const DetallePublicacion = () => {
 
                 {/* titulo, descripcion, categoria, precio y boton alquilar */}
                 <div className="flex flex-col lg:ml-96 ml-4 px-4 lg:px-0">
-                    <div className="mt-10">
+                    {/* <div className="mt-10">
                         <h1 className="text-3xl font-bold text-[#757575]">
                             {publicacion.titulo.length > 41
                                 ? <>{publicacion.titulo.substring(0, 41)}<br />{publicacion.titulo.substring(41)}</>
@@ -491,7 +491,41 @@ const DetallePublicacion = () => {
                         <p className="text-lg text-[#757575]" style={{ whiteSpace: 'pre-line' }}>
                             {publicacion.descripcion.length > 64 ? `${publicacion.descripcion.substring(0, 64)}\n${publicacion.descripcion.substring(64)}` : publicacion.descripcion}
                         </p>
+                    </div> */}
+
+                    <div className="mt-10">
+                        <h1 className="text-3xl font-bold text-[#757575]">
+                            <span className="hidden lg:inline">
+                                {publicacion.titulo.length > 41
+                                    ? <>{publicacion.titulo.substring(0, 41)}<br />{publicacion.titulo.substring(41)}</>
+                                    : publicacion.titulo}
+                            </span>
+                            <span className="inline lg:hidden">
+                                {publicacion.titulo.length > 17
+                                    ? <>{publicacion.titulo.substring(0, 17)}<br />{publicacion.titulo.substring(17)}</>
+                                    : publicacion.titulo}
+                            </span>
+                        </h1>
                     </div>
+
+                    <hr className="mt-10 mx-auto lg:mx-0" style={{ width: '20%', borderTop: '0.5px solid #757575' }} />
+
+                    <div className="mt-10">
+                        <h1 className="text-2xl font-semibold text-[#757575]">Descripción:</h1>
+                        <p className="text-lg text-[#757575]" style={{ whiteSpace: 'pre-line' }}>
+                            <span className="hidden lg:inline">
+                                {publicacion.descripcion.length > 64
+                                    ? `${publicacion.descripcion.substring(0, 64)}\n${publicacion.descripcion.substring(64)}`
+                                    : publicacion.descripcion}
+                            </span>
+                            <span className="inline lg:hidden">
+                                {publicacion.descripcion.length > 38
+                                    ? `${publicacion.descripcion.substring(0, 38)}\n${publicacion.descripcion.substring(38)}`
+                                    : publicacion.descripcion}
+                            </span>
+                        </p>
+                    </div>
+
 
 
                     <hr className="mt-10 mx-auto lg:mx-0" style={{ width: '20%', borderTop: '1px solid #757575' }} />
@@ -541,6 +575,17 @@ const DetallePublicacion = () => {
                             onClick={(e) => e.stopPropagation()}
                             onSubmit={handleSubmit}
                         >
+
+                            {/* Botón de Cerrar */}
+                            <button
+                                type="button"
+                                className="absolute top-3 right-3 bg-gray-200 hover:bg-gray-300 text-gray-600 rounded-full p-2 focus:outline-none"
+                                onClick={() => setAlquilarPopUp(false)}
+                            >
+                                ✖
+                            </button>
+
+
                             {/* Nombre */}
                             <div>
                                 <label className="block text-lg font-semibold text-[#757575]">Nombre</label>
