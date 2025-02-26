@@ -468,23 +468,23 @@ const DetallePublicacion = () => {
                                 >
                                     {publicacion.imagenes.map((img, index) => (
                                         <SwiperSlide key={index}>
-                                            {/* Contenedor con aspecto fijo 16:9 */}
-                                            <div className="w-full aspect-video rounded-lg overflow-hidden">
+                                            {/* Contenedor con flexbox para centrar la imagen */}
+                                            <div className="w-full max-w-[400px] h-[400px] flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden mx-auto">
                                                 <img
                                                     src={img}
                                                     alt={`Imagen ${index + 1}`}
-                                                    className="w-full h-full object-cover"
+                                                    className="max-w-full max-h-full object-contain"
                                                 />
                                             </div>
                                         </SwiperSlide>
                                     ))}
                                 </Swiper>
                             ) : (
-                                <div className="w-full max-w-3xl mx-auto mt-4 rounded-lg aspect-video overflow-hidden">
+                                <div className="w-full max-w-[400px] h-[400px] flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden mx-auto">
                                     <img
                                         src={publicacion.imagenes[0]}
                                         alt={publicacion.titulo}
-                                        className="w-full h-full object-cover"
+                                        className="max-w-full max-h-full object-contain"
                                     />
                                 </div>
                             )}
@@ -498,6 +498,7 @@ const DetallePublicacion = () => {
                         </div>
                     </div>
                 </div>
+
 
 
 
