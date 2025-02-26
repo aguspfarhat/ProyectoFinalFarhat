@@ -410,49 +410,10 @@ const DetallePublicacion = () => {
                 <button onClick={() => router.back()} className="text-[#757575] mb-4 hover:text-[#35B88E]">← Volver</button>
 
 
+
+
+
                 {/* <div className="text-center">
-                    <div className="flex flex-wrap justify-center gap-4 mt-4">
-                        <div className="text-center">
-                            {publicacion.imagenes.length > 1 ? (
-                                <Swiper
-                                    modules={[Navigation]}
-                                    navigation
-                                    className="w-full max-w-3xl mx-auto mt-4 rounded-lg"
-                                >
-                                    {publicacion.imagenes.map((img, index) => (
-                                        <SwiperSlide key={index}>
-                                            <div className="w-full h-[500px] flex justify-center items-center">
-                                                <img
-                                                    src={img}
-                                                    alt={`Imagen ${index + 1}`}
-                                                    className="object-cover w-full h-full rounded-lg"
-                                                />
-                                            </div>
-                                        </SwiperSlide>
-                                    ))}
-                                </Swiper>
-                            ) : (
-                                <div className="w-full max-w-3xl mx-auto mt-4 rounded-lg h-[500px] flex justify-center items-center">
-                                    <img
-                                        src={publicacion.imagenes[0]}
-                                        alt={publicacion.titulo}
-                                        className="object-cover w-full h-full rounded-lg"
-                                    />
-                                </div>
-                            )}
-                            <style>
-                                {`
-                    .swiper-button-next, .swiper-button-prev {
-                        color: #35B88E !important;
-                    }
-                `}
-                            </style>
-                        </div>
-                    </div>
-                </div> */}
-
-
-                <div className="text-center">
                     <div className="flex flex-wrap justify-center gap-4 mt-4">
                         <div className="text-center">
                             {publicacion.imagenes.length > 1 ? (
@@ -493,8 +454,50 @@ const DetallePublicacion = () => {
                             </style>
                         </div>
                     </div>
-                </div>
+                </div> */}
 
+
+                <div className="text-center">
+                    <div className="flex flex-wrap justify-center gap-4 mt-4">
+                        <div className="text-center">
+                            {publicacion.imagenes.length > 1 ? (
+                                <Swiper
+                                    modules={[Navigation]}
+                                    navigation
+                                    className="w-full max-w-3xl mx-auto mt-4 rounded-lg"
+                                >
+                                    {publicacion.imagenes.map((img, index) => (
+                                        <SwiperSlide key={index}>
+                                            {/* Contenedor con aspecto fijo 16:9 */}
+                                            <div className="w-full aspect-video rounded-lg overflow-hidden">
+                                                <img
+                                                    src={img}
+                                                    alt={`Imagen ${index + 1}`}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            </div>
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
+                            ) : (
+                                <div className="w-full max-w-3xl mx-auto mt-4 rounded-lg aspect-video overflow-hidden">
+                                    <img
+                                        src={publicacion.imagenes[0]}
+                                        alt={publicacion.titulo}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                            )}
+                            <style>
+                                {`
+          .swiper-button-next, .swiper-button-prev {
+              color: #35B88E !important;
+          }
+        `}
+                            </style>
+                        </div>
+                    </div>
+                </div>
 
 
 
