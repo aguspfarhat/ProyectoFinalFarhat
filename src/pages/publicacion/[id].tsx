@@ -11,6 +11,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
+import React from 'react';
 
 // Importar componentes de Google Maps
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
@@ -364,6 +365,56 @@ const DetallePublicacion = () => {
         }
     };
 
+
+
+    // Función para insertar saltos de línea sin cortar palabras
+    const wordWrap = (text: string, maxLen: number, force: boolean = false): string => {
+        const words: string[] = text.split(' ');
+        let line = '';
+        const result: string[] = [];
+
+        for (const word of words) {
+            // Si se puede agregar la palabra a la línea actual sin exceder el límite
+            if ((line.length ? line.length + 1 : 0) + word.length <= maxLen) {
+                line += (line.length ? ' ' : '') + word;
+            } else {
+                // Se agrega la línea actual al resultado si no está vacía
+                if (line) {
+                    result.push(line);
+                }
+                // Si se fuerza el corte y la palabra es mayor al límite, se parte la palabra
+                if (force && word.length > maxLen) {
+                    for (let i = 0; i < word.length; i += maxLen) {
+                        result.push(word.substring(i, i + maxLen));
+                    }
+                    line = '';
+                } else {
+                    line = word;
+                }
+            }
+        }
+        if (line) result.push(line);
+        return result.join('\n');
+    };
+
+    // Función para renderizar el resultado de wordWrap inyectando elementos <br /> en lugar de \n
+    const renderWordWrap = (text: string, maxLen: number, force: boolean = false): React.ReactNode => {
+        const wrappedText = wordWrap(text, maxLen, force);
+        const lines = wrappedText.split('\n');
+        return (
+            <>
+                {lines.map((line, index) => (
+                    <React.Fragment key={index}>
+                        {line}
+                        {index !== lines.length - 1 && <br />}
+                    </React.Fragment>
+                ))}
+            </>
+        );
+    };
+
+
+
     if (!publicacion) {
         return <div className="text-center text-gray-500 text-xl">Cargando publicación...</div>;
     }
@@ -378,52 +429,6 @@ const DetallePublicacion = () => {
                 )}
                 <button onClick={() => router.back()} className="text-[#757575] mb-4 hover:text-[#35B88E]">← Volver</button>
 
-
-
-
-
-                {/* <div className="text-center">
-                    <div className="flex flex-wrap justify-center gap-4 mt-4">
-                        <div className="text-center">
-                            {publicacion.imagenes.length > 1 ? (
-                                <Swiper
-                                    modules={[Navigation]}
-                                    navigation
-                                    className="w-full max-w-3xl mx-auto mt-4 rounded-lg"
-                                >
-                                    {publicacion.imagenes.map((img, index) => (
-                                        <SwiperSlide key={index}>
-                                            <div className="w-full h-[500px] flex justify-center items-center">
-                                                <img
-                                                    src={img}
-                                                    alt={`Imagen ${index + 1}`}
-                                                    className="object-cover w-full h-full rounded-lg"
-                                                    style={{ objectFit: 'cover' }}
-                                                />
-                                            </div>
-                                        </SwiperSlide>
-                                    ))}
-                                </Swiper>
-                            ) : (
-                                <div className="w-full max-w-3xl mx-auto mt-4 rounded-lg h-[500px] flex justify-center items-center">
-                                    <img
-                                        src={publicacion.imagenes[0]}
-                                        alt={publicacion.titulo}
-                                        className="object-cover w-full h-full rounded-lg"
-                                        style={{ objectFit: 'cover' }}
-                                    />
-                                </div>
-                            )}
-                            <style>
-                                {`
-                    .swiper-button-next, .swiper-button-prev {
-                        color: #35B88E !important;
-                    }
-                `}
-                            </style>
-                        </div>
-                    </div>
-                </div> */}
 
 
 
@@ -475,25 +480,8 @@ const DetallePublicacion = () => {
 
                 {/* titulo, descripcion, categoria, precio y boton alquilar */}
                 <div className="flex flex-col lg:ml-96 ml-4 px-4 lg:px-0">
+
                     {/* <div className="mt-10">
-                        <h1 className="text-3xl font-bold text-[#757575]">
-                            {publicacion.titulo.length > 41
-                                ? <>{publicacion.titulo.substring(0, 41)}<br />{publicacion.titulo.substring(41)}</>
-                                : publicacion.titulo}
-                        </h1>
-                    </div>
-
-
-                    <hr className="mt-10 mx-auto lg:mx-0" style={{ width: '20%', borderTop: '0.5px solid #757575' }} />
-
-                    <div className="mt-10">
-                        <h1 className="text-2xl font-semibold text-[#757575]">Descripcion:</h1>
-                        <p className="text-lg text-[#757575]" style={{ whiteSpace: 'pre-line' }}>
-                            {publicacion.descripcion.length > 64 ? `${publicacion.descripcion.substring(0, 64)}\n${publicacion.descripcion.substring(64)}` : publicacion.descripcion}
-                        </p>
-                    </div> */}
-
-                    <div className="mt-10">
                         <h1 className="text-3xl font-bold text-[#757575]">
                             <span className="hidden lg:inline">
                                 {publicacion.titulo.length > 41
@@ -524,7 +512,43 @@ const DetallePublicacion = () => {
                                     : publicacion.descripcion}
                             </span>
                         </p>
+                    </div> */}
+
+                    <div className="mt-10">
+                        <h1 className="text-3xl font-bold text-[#757575]">
+                            {/* Versión para pantallas grandes: límite de 41 caracteres para el título */}
+                            <span className="hidden lg:inline">
+                                {renderWordWrap(publicacion.titulo, 41)}
+                            </span>
+                            {/* Versión para móviles: límite de 17 caracteres para el título */}
+                            <span className="inline lg:hidden">
+                                {renderWordWrap(publicacion.titulo, 17)}
+                            </span>
+                        </h1>
                     </div>
+
+                    <hr
+                        className="mt-10 mx-auto lg:mx-0"
+                        style={{ width: '20%', borderTop: '0.5px solid #757575' }}
+                    />
+
+                    <div className="mt-10">
+                        <h1 className="text-2xl font-semibold text-[#757575]">Descripción:</h1>
+                        {/* Para la descripción se mantiene whiteSpace: 'pre-line' en el párrafo */}
+                        <p className="text-lg text-[#757575]" style={{ whiteSpace: 'pre-line' }}>
+                            {/* Pantallas grandes: límite de 64 caracteres sin forzar cortes */}
+                            <span className="hidden lg:inline">
+                                {renderWordWrap(publicacion.descripcion, 33)}
+                            </span>
+                            {/* Móviles: límite de 20 caracteres, forzando el corte si es necesario */}
+                            <span className="inline lg:hidden">
+                                {renderWordWrap(publicacion.descripcion, 20, true)}
+                            </span>
+                        </p>
+                    </div>
+
+
+
 
 
 
