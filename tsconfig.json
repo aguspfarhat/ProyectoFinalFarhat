@@ -43,6 +43,47 @@
 // =======
 // }
 // >>>>>>> produccionResponsive
+// {
+//   "compilerOptions": {
+//     "lib": [
+//       "dom",
+//       "dom.iterable",
+//       "esnext"
+//     ],
+//     "allowJs": true,
+//     "skipLibCheck": true,
+//     "strict": true,
+//     "noEmit": true,
+//     "esModuleInterop": true,
+//     "module": "esnext",
+//     "moduleResolution": "bundler",
+//     "resolveJsonModule": true,
+//     "isolatedModules": true,
+//     "jsx": "preserve",
+//     "incremental": true,
+//     "plugins": [
+//       {
+//         "name": "next"
+//       }
+//     ],
+//     "paths": {
+//       "@/*": [
+//         "./src/*"
+//       ]
+//     },
+//     "target": "ES2017"
+//   },
+//   "include": [
+//     "next-env.d.ts",
+//     "**/*.ts",
+//     "**/*.tsx",
+//     ".next/types/**/*.ts",
+//     "src"
+//   ],
+//   "exclude": [
+//     "node_modules"
+//   ]
+// }
 {
   "compilerOptions": {
     "lib": [
@@ -71,7 +112,11 @@
         "./src/*"
       ]
     },
-    "target": "ES2017"
+    "target": "ES2017",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./next.d.ts" // Asegúrate de que esté aquí
+    ]
   },
   "include": [
     "next-env.d.ts",

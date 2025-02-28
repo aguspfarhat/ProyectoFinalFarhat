@@ -55,6 +55,41 @@ const Perfil = () => {
     }, [session]);
 
     // Manejo de cambio de foto de perfil
+    // const manejarCambioFoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const file = e.target.files?.[0];
+    //     if (!file) {
+    //         console.log("No se seleccionó ningún archivo");
+    //         return;
+    //     }
+
+    //     const formData = new FormData();
+    //     formData.append("file", file);
+    //     formData.append("email", session?.user?.email || "");
+
+    //     console.log("Enviando solicitud POST a /api/fotoPerfil con el archivo...");
+    //     console.log("FormData antes de enviar:", formData);
+
+    //     try {
+    //         const res = await fetch("/api/fotoPerfil", {
+    //             method: "POST",
+    //             body: formData,
+    //         });
+
+    //         if (!res.ok) {
+    //             console.log("Error al subir la foto:", await res.json());
+    //         }
+
+    //         const data = await res.json();
+
+    //         if (res.ok) {
+    //             setFotoPerfil(data.url);
+    //             console.log("Foto actualizada con éxito", data.url);
+    //         }
+    //     } catch (error) {
+    //         console.error("Error en la solicitud:", error);
+    //     }
+    // };
+
     const manejarCambioFoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) {
@@ -64,10 +99,7 @@ const Perfil = () => {
 
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("email", session?.user?.email || "");
-
-        console.log("Enviando solicitud POST a /api/fotoPerfil con el archivo...");
-        console.log("FormData antes de enviar:", formData);
+        formData.append("email", session?.user?.email || ""); // Asegúrate de que el email esté correctamente asignado
 
         try {
             const res = await fetch("/api/fotoPerfil", {
@@ -76,19 +108,24 @@ const Perfil = () => {
             });
 
             if (!res.ok) {
-                console.log("Error al subir la foto:", await res.json());
+                const errorData = await res.json();
+                console.log("Error al subir la foto:", errorData);
+                return;
             }
 
             const data = await res.json();
-
-            if (res.ok) {
-                setFotoPerfil(data.url);
-                console.log("Foto actualizada con éxito", data.url);
-            }
+            setFotoPerfil(data.url);
+            console.log("Foto actualizada con éxito", data.url);
         } catch (error) {
             console.error("Error en la solicitud:", error);
         }
     };
+
+
+
+
+
+
 
     // Función para guardar la ubicación
     const guardarUbicacion = async (lat: number, lng: number) => {
