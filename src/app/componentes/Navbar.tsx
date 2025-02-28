@@ -100,15 +100,18 @@ const Navbar = () => {
                     {/* Foto de perfil centrada */}
                     {session && (
                         <div className="mb-4">
-                            <Link href="/Perfil">
-                                <Image
-                                    src={fotoPerfil || "/default-profile.png"}
-                                    width={50}
-                                    height={50}
-                                    alt="Perfil"
-                                    className="rounded-full cursor-pointer"
-                                />
-                            </Link>
+                            <div className="relative w-[50px] h-[50px]">
+                                <Link href="/Perfil">
+                                    <Image
+                                        src={fotoPerfil || "/default-profile.png"}
+                                        alt="Perfil"
+                                        fill
+                                        style={{ objectFit: "cover" }}
+                                        className="rounded-full cursor-pointer"
+                                    />
+                                </Link>
+                            </div>
+
                         </div>
                     )}
 
@@ -149,14 +152,16 @@ const Navbar = () => {
             <div className="hidden md:flex space-x-4 relative">
                 {session ? (
                     <div>
-                        <Image
-                            src={fotoPerfil || "/default-profile.png"}
-                            width={35}
-                            height={35}
-                            alt="Perfil"
-                            className="rounded-full cursor-pointer"
-                            onClick={() => setIsProfileOpen(!isProfileOpen)}
-                        />
+                        <div className="relative w-[35px] h-[35px]">
+                            <Image
+                                src={fotoPerfil || "/default-profile.png"}
+                                alt="Perfil"
+                                fill
+                                style={{ objectFit: "cover" }}
+                                className="rounded-full cursor-pointer"
+                                onClick={() => setIsProfileOpen(!isProfileOpen)}
+                            />
+                        </div>
                         {isProfileOpen && (
                             <div className="absolute right-0 mt-2 w-48 bg-white shadow-md rounded-md z-50">
                                 <button className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100">

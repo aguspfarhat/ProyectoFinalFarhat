@@ -151,13 +151,23 @@ const Perfil = () => {
                         onMouseLeave={() => setHover(false)}
                     >
                         <div className="relative w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[250px] md:h-[250px] lg:w-[300px] lg:h-[300px]">
-                            <Image
+                            {/* <Image
                                 src={fotoPerfil.startsWith("/") ? fotoPerfil : "/default-profile.png"}
                                 alt="Perfil"
                                 layout="fill"
                                 objectFit="cover"
                                 className="rounded-full"
-                            />
+                            /> */}
+                            <div className="relative w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[250px] md:h-[250px] lg:w-[300px] lg:h-[300px]">
+                                <Image
+                                    src={fotoPerfil || "/default-profile.png"}
+                                    alt="Perfil"
+                                    fill
+                                    style={{ objectFit: "cover" }}
+                                    className="rounded-full"
+                                />
+                            </div>
+
                             {hover && (
                                 <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full">
                                     <Pencil className="w-8 h-8 text-white" />
